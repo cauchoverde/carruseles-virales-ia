@@ -18,10 +18,11 @@
     padding:32px 20px 60px;
     text-align:center;
   }
-  header img.logo { width:52px; height:52px; object-fit:contain; margin-bottom:10px; border-radius:12px; background:white; padding:6px; }
+  header img.logo { width:78px; height:78px; object-fit:contain; margin-bottom:12px; border-radius:16px; background:white; padding:8px; }
   header h1 { font-size:1.7rem; margin-bottom:8px; }
   header p { opacity:.95; font-size:1rem; }
   @media (min-width:640px) {
+    header img.logo { width:100px; height:100px; }
     header h1 { font-size:2rem; }
     header p { font-size:1.05rem; }
   }
@@ -75,6 +76,17 @@
   }
   .img-thumb button { width:100%; margin-top:6px; }
   .cargando-imgs { grid-column:1/-1; text-align:center; color:#8B5CF6; font-weight:600; padding:24px 0; }
+  .img-thumb img { cursor:pointer; }
+  .modal-overlay {
+    position:fixed; inset:0; background:rgba(0,0,0,.85); display:none;
+    align-items:center; justify-content:center; padding:20px; z-index:999;
+  }
+  .modal-overlay.show { display:flex; }
+  .modal-content { max-width:440px; width:100%; text-align:center; }
+  .modal-content img {
+    width:100%; border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.5); display:block;
+  }
+  .modal-content .btn-zip, .modal-content .copy-btn { margin-top:10px; }
   .btn {
     background:#8B5CF6; color:white; border:none; padding:16px 30px;
     border-radius:12px; font-size:1.05rem; font-weight:700; cursor:pointer;
@@ -158,29 +170,34 @@
       <span class="usos-txt" id="usosTexto"></span>
     </div>
 
-    <label for="nicho">¿Qué vendes o haces?</label>
-    <input type="text" id="nicho" placeholder="Escribe el tuyo o toca un ejemplo abajo...">
-    <p class="ejemplos">💡 Toca un ejemplo o escribe el tuyo:</p>
-    <div class="chips" id="chipsNicho">
-      <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Vendo ropa cómoda para emprendedoras</button>
-      <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Diseño logos para pequeños negocios</button>
-      <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Doy asesorías de marketing digital</button>
-      <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Vendo postres saludables sin azúcar</button>
-      <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Hago páginas web para restaurantes</button>
-      <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Enseño inglés a profesionales</button>
+    <div class="paso" id="paso1">
+      <label for="nicho">¿Qué vendes o haces?</label>
+      <input type="text" id="nicho" placeholder="Escribe el tuyo o toca un ejemplo abajo...">
+      <p class="ejemplos">💡 Toca un ejemplo o escribe el tuyo:</p>
+      <div class="chips" id="chipsNicho">
+        <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Vendo ropa cómoda para emprendedoras</button>
+        <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Diseño logos para pequeños negocios</button>
+        <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Doy asesorías de marketing digital</button>
+        <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Vendo postres saludables sin azúcar</button>
+        <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Hago páginas web para restaurantes</button>
+        <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Enseño inglés a profesionales</button>
+      </div>
+      <button class="btn" onclick="irPaso2()">Siguiente →</button>
     </div>
 
-    <label for="clienteIdeal">¿Quién es tu cliente ideal?</label>
-    <input type="text" id="clienteIdeal" placeholder="Escribe el tuyo o toca un ejemplo abajo...">
-    <p class="ejemplos">💡 Mientras más específico, mejor sale el carrusel:</p>
-    <div class="chips" id="chipsCliente">
-      <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Mujeres 25-40 años, freelancers que buscan verse profesionales</button>
-      <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Dueños de restaurantes sin equipo de marketing</button>
-      <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Profesionales que necesitan inglés para el trabajo</button>
-      <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Madres que buscan postres saludables para sus hijos</button>
+    <div class="paso" id="paso2" style="display:none;">
+      <label for="clienteIdeal">¿Quién es tu cliente ideal?</label>
+      <input type="text" id="clienteIdeal" placeholder="Escribe el tuyo o toca un ejemplo abajo...">
+      <p class="ejemplos">💡 Mientras más específico, mejor sale el carrusel:</p>
+      <div class="chips" id="chipsCliente">
+        <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Mujeres 25-40 años, freelancers que buscan verse profesionales</button>
+        <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Dueños de restaurantes sin equipo de marketing</button>
+        <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Profesionales que necesitan inglés para el trabajo</button>
+        <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Madres que buscan postres saludables para sus hijos</button>
+      </div>
+      <button class="btn btn-outline" onclick="irPaso1()" style="margin-bottom:10px;">← Atrás</button>
+      <button class="btn" id="btnGenerar" onclick="generarCarrusel()">Generar Carrusel Viral</button>
     </div>
-
-    <button class="btn" id="btnGenerar" onclick="generarCarrusel()">Generar Carrusel Viral</button>
 
     <div class="resultado" id="resultado">
       <div class="titulo-carrusel" id="tituloCarrusel"></div>
@@ -194,7 +211,6 @@
       <div id="slideRenderInner" style="width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:100px; text-align:center; box-sizing:border-box; position:relative;">
         <div id="slideRenderBadge" style="position:absolute; top:50px; right:60px; padding:10px 26px; border-radius:30px; font-weight:700; font-size:28px;"></div>
         <div id="slideRenderTexto" style="font-weight:800; line-height:1.35; max-width:900px;"></div>
-        <div id="slideRenderFooter" style="position:absolute; bottom:50px; font-size:26px; font-weight:700;">✨ CauchoVerde · cauchoverde.com</div>
       </div>
     </div>
 
@@ -218,6 +234,14 @@
       <div class="pago-botones" id="pagoBotones" style="opacity:.4; pointer-events:none;">
         <a href="https://mpago.li/2YVxsdo" target="_blank" class="pago-btn cop">Pagar en COP 🇨🇴</a>
         <a href="https://payco.link/822296af-db78-47c4-bb2b-717cab157a7d" target="_blank" class="pago-btn usd">Pagar en USD 🌎</a>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="modalImagen" onclick="cerrarModal()">
+      <div class="modal-content" onclick="event.stopPropagation()">
+        <img id="modalImg" src="" alt="Vista completa">
+        <button class="btn-zip" onclick="descargarImagenGuardadaDesdeModal()">⬇️ Descargar esta imagen</button>
+        <button class="copy-btn" style="width:100%;" onclick="cerrarModal()">Cerrar</button>
       </div>
     </div>
 
@@ -419,6 +443,26 @@ function elegirEjemplo(campo, btn) {
   const grupo = btn.parentElement;
   grupo.querySelectorAll('.chip').forEach(c => c.classList.remove('chip-selected'));
   btn.classList.add('chip-selected');
+  if (campo === 'nicho') {
+    setTimeout(irPaso2, 250);
+  }
+}
+
+function irPaso2() {
+  const nicho = document.getElementById('nicho').value.trim();
+  if (!nicho) {
+    alert('Cuéntanos qué vendes o haces antes de continuar.');
+    return;
+  }
+  document.getElementById('paso1').style.display = 'none';
+  document.getElementById('paso2').style.display = 'block';
+  document.getElementById('paso2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function irPaso1() {
+  document.getElementById('paso2').style.display = 'none';
+  document.getElementById('paso1').style.display = 'block';
+  document.getElementById('paso1').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ===== GENERACIÓN DE IMÁGENES DEL CARRUSEL =====
@@ -434,7 +478,6 @@ function prepararSlideRender(slide, index, total) {
   const inner = document.getElementById('slideRenderInner');
   const badge = document.getElementById('slideRenderBadge');
   const texto = document.getElementById('slideRenderTexto');
-  const footer = document.getElementById('slideRenderFooter');
   const esExtremo = (index === 0 || index === total - 1);
 
   if (esExtremo) {
@@ -442,13 +485,11 @@ function prepararSlideRender(slide, index, total) {
     texto.style.color = 'white';
     badge.style.background = 'rgba(255,255,255,.25)';
     badge.style.color = 'white';
-    footer.style.color = 'rgba(255,255,255,.9)';
   } else {
     inner.style.background = '#F9FAFB';
     texto.style.color = '#1F2937';
     badge.style.background = '#10B981';
     badge.style.color = 'white';
-    footer.style.color = '#888';
   }
 
   badge.textContent = (index + 1) + '/' + total;
@@ -485,7 +526,7 @@ async function generarGaleriaImagenes() {
       const div = document.createElement('div');
       div.className = 'img-thumb';
       div.innerHTML = `
-        <img src="${url}" alt="Slide ${i + 1}">
+        <img src="${url}" alt="Slide ${i + 1}" onclick="abrirModal(${i})">
         <button class="copy-btn" onclick="descargarImagenGuardada(${i})">⬇️ Slide ${i + 1}</button>
       `;
       galeria.appendChild(div);
@@ -505,6 +546,26 @@ function descargarImagenGuardada(index) {
   a.download = `slide-${index + 1}.png`;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+let modalIndiceActual = null;
+
+function abrirModal(index) {
+  const blob = imagenesGeneradas[index];
+  if (!blob) return;
+  modalIndiceActual = index;
+  document.getElementById('modalImg').src = URL.createObjectURL(blob);
+  document.getElementById('modalImagen').classList.add('show');
+}
+
+function cerrarModal() {
+  document.getElementById('modalImagen').classList.remove('show');
+  modalIndiceActual = null;
+}
+
+function descargarImagenGuardadaDesdeModal() {
+  if (modalIndiceActual === null) return;
+  descargarImagenGuardada(modalIndiceActual);
 }
 
 async function descargarTodasImagenes() {
