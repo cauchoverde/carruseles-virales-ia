@@ -67,15 +67,23 @@
   }
   .chip:hover { background:#E9E4FF; }
   .chip.chip-selected { background:#8B5CF6; color:white; border-color:#8B5CF6; }
-  .galeria-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:16px 0; }
-  @media (min-width:640px) { .galeria-grid { grid-template-columns:repeat(3,1fr); } }
-  .img-thumb { text-align:center; }
+  .galeria-grid {
+    display:flex; overflow-x:auto; gap:14px; scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch; padding:6px 4px 10px; margin:16px 0;
+  }
+  .galeria-grid::-webkit-scrollbar { height:6px; }
+  .galeria-grid::-webkit-scrollbar-thumb { background:#ddd; border-radius:10px; }
+  .img-thumb { flex:0 0 78%; scroll-snap-align:center; text-align:center; }
+  @media (min-width:640px) { .img-thumb { flex:0 0 38%; } }
   .img-thumb img {
-    width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:10px;
+    width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:14px;
     box-shadow:0 4px 14px rgba(0,0,0,.15); display:block; background:#eee;
   }
   .img-thumb button { width:100%; margin-top:6px; }
-  .cargando-imgs { grid-column:1/-1; text-align:center; color:#8B5CF6; font-weight:600; padding:24px 0; }
+  .cargando-imgs { flex:1 0 100%; text-align:center; color:#8B5CF6; font-weight:600; padding:24px 0; }
+  .galeria-dots { display:flex; justify-content:center; gap:6px; margin-bottom:16px; }
+  .galeria-dots .dot { width:7px; height:7px; border-radius:50%; background:#ddd; transition:all .2s; }
+  .galeria-dots .dot.active { background:#8B5CF6; width:20px; border-radius:4px; }
   .img-thumb img { cursor:pointer; }
   .modal-overlay {
     position:fixed; inset:0; background:rgba(0,0,0,.85); display:none;
@@ -196,7 +204,9 @@
 
     <div class="resultado" id="resultado">
       <div class="titulo-carrusel" id="tituloCarrusel"></div>
+      <p id="hintDeslizar" style="display:none; text-align:center; color:#8B5CF6; font-size:.82rem; font-weight:600; margin-bottom:2px;">👉 Desliza para ver todo el carrusel</p>
       <div class="galeria-grid" id="galeriaImagenes"></div>
+      <div class="galeria-dots" id="galeriaDots"></div>
       <button class="btn-zip" id="btnDescargarZip" onclick="descargarTodasImagenes()">📥 Descargar todas las imágenes (ZIP)</button>
       <div id="slidesContainer"></div>
       <button class="copy-btn" onclick="copiarTodo()" style="width:100%; margin-top:8px;">📋 Copiar todos los copys</button>
@@ -578,7 +588,10 @@ async function generarGaleriaImagenes() {
   const slides = ultimoResultado.slides || [];
   const total = slides.length;
   const galeria = document.getElementById('galeriaImagenes');
+  const hint = document.getElementById('hintDeslizar');
   galeria.innerHTML = '<p class="cargando-imgs">🎨 Generando vista previa de tus imágenes...</p>';
+  hint.style.display = 'none';
+  document.getElementById('galeriaDots').innerHTML = '';
   imagenesGeneradas = [];
 
   try {
@@ -598,10 +611,34 @@ async function generarGaleriaImagenes() {
       `;
       galeria.appendChild(div);
     });
+    hint.style.display = 'block';
+    construirDots(imagenesGeneradas.length);
+    configurarScrollGaleria();
   } catch (e) {
     console.error(e);
     galeria.innerHTML = '<p class="cargando-imgs" style="color:#e74c3c;">No se pudo generar la vista previa. El botón de ZIP igual intentará generarlas.</p>';
   }
+}
+
+function construirDots(n) {
+  const cont = document.getElementById('galeriaDots');
+  cont.innerHTML = '';
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    cont.appendChild(d);
+  }
+}
+
+function configurarScrollGaleria() {
+  const galeria = document.getElementById('galeriaImagenes');
+  galeria.onscroll = () => {
+    const primera = galeria.firstElementChild;
+    if (!primera) return;
+    const anchoTarjeta = primera.offsetWidth + 14;
+    const idx = Math.round(galeria.scrollLeft / anchoTarjeta);
+    document.querySelectorAll('#galeriaDots .dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  };
 }
 
 function descargarImagenGuardada(index) {
