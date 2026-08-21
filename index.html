@@ -57,7 +57,24 @@
     font-size:1rem; margin-bottom:6px;
   }
   input[type=text]:focus { outline:none; border-color:#10B981; }
-  .ejemplos { font-size:.82rem; color:#888; margin-bottom:20px; }
+  .ejemplos { font-size:.82rem; color:#888; margin-bottom:10px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+  .chip {
+    background:#F3F0FF; color:#6D28D9; border:1px solid #DDD6FE; padding:9px 14px;
+    border-radius:20px; font-size:.82rem; cursor:pointer; text-align:left;
+    font-family:inherit;
+  }
+  .chip:hover { background:#E9E4FF; }
+  .chip.chip-selected { background:#8B5CF6; color:white; border-color:#8B5CF6; }
+  .galeria-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:16px 0; }
+  @media (min-width:640px) { .galeria-grid { grid-template-columns:repeat(3,1fr); } }
+  .img-thumb { text-align:center; }
+  .img-thumb img {
+    width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:10px;
+    box-shadow:0 4px 14px rgba(0,0,0,.15); display:block; background:#eee;
+  }
+  .img-thumb button { width:100%; margin-top:6px; }
+  .cargando-imgs { grid-column:1/-1; text-align:center; color:#8B5CF6; font-weight:600; padding:24px 0; }
   .btn {
     background:#8B5CF6; color:white; border:none; padding:16px 30px;
     border-radius:12px; font-size:1.05rem; font-weight:700; cursor:pointer;
@@ -142,31 +159,32 @@
     </div>
 
     <label for="nicho">¿Qué vendes o haces?</label>
-    <input type="text" id="nicho" list="ejemplosNicho" placeholder="Escribe o elige un ejemplo...">
-    <datalist id="ejemplosNicho">
-      <option value="Vendo ropa cómoda para emprendedoras">
-      <option value="Diseño logos para pequeños negocios">
-      <option value="Doy asesorías de marketing digital">
-      <option value="Vendo postres saludables sin azúcar">
-      <option value="Hago páginas web para restaurantes">
-      <option value="Enseño inglés a profesionales">
-    </datalist>
-    <p class="ejemplos">💡 Puedes escribir el tuyo o elegir uno de la lista.</p>
+    <input type="text" id="nicho" placeholder="Escribe el tuyo o toca un ejemplo abajo...">
+    <p class="ejemplos">💡 Toca un ejemplo o escribe el tuyo:</p>
+    <div class="chips" id="chipsNicho">
+      <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Vendo ropa cómoda para emprendedoras</button>
+      <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Diseño logos para pequeños negocios</button>
+      <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Doy asesorías de marketing digital</button>
+      <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Vendo postres saludables sin azúcar</button>
+      <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Hago páginas web para restaurantes</button>
+      <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Enseño inglés a profesionales</button>
+    </div>
 
     <label for="clienteIdeal">¿Quién es tu cliente ideal?</label>
-    <input type="text" id="clienteIdeal" list="ejemplosCliente" placeholder="Escribe o elige un ejemplo...">
-    <datalist id="ejemplosCliente">
-      <option value="Mujeres 25-40 años, freelancers que buscan verse profesionales">
-      <option value="Dueños de restaurantes sin equipo de marketing">
-      <option value="Profesionales que necesitan inglés para el trabajo">
-      <option value="Madres que buscan postres saludables para sus hijos">
-    </datalist>
-    <p class="ejemplos">💡 Mientras más específico, mejor sale el carrusel.</p>
+    <input type="text" id="clienteIdeal" placeholder="Escribe el tuyo o toca un ejemplo abajo...">
+    <p class="ejemplos">💡 Mientras más específico, mejor sale el carrusel:</p>
+    <div class="chips" id="chipsCliente">
+      <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Mujeres 25-40 años, freelancers que buscan verse profesionales</button>
+      <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Dueños de restaurantes sin equipo de marketing</button>
+      <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Profesionales que necesitan inglés para el trabajo</button>
+      <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Madres que buscan postres saludables para sus hijos</button>
+    </div>
 
     <button class="btn" id="btnGenerar" onclick="generarCarrusel()">Generar Carrusel Viral</button>
 
     <div class="resultado" id="resultado">
       <div class="titulo-carrusel" id="tituloCarrusel"></div>
+      <div class="galeria-grid" id="galeriaImagenes"></div>
       <button class="btn-zip" id="btnDescargarZip" onclick="descargarTodasImagenes()">📥 Descargar todas las imágenes (ZIP)</button>
       <div id="slidesContainer"></div>
       <button class="copy-btn" onclick="copiarTodo()" style="width:100%; margin-top:8px;">📋 Copiar todos los textos</button>
@@ -386,16 +404,21 @@ function mostrarResultado(data) {
     div.innerHTML = `
       <h4>Slide ${slide.numero} — ${slide.tipo || ''}</h4>
       <p>${slide.texto}</p>
-      <div class="slide-actions">
-        <button class="copy-btn" onclick="copiarTexto(this, ${JSON.stringify(slide.texto)})">📋 Copiar texto</button>
-        <button class="copy-btn" onclick="descargarImagenIndividual(${idx})">🖼️ Descargar imagen</button>
-      </div>
+      <button class="copy-btn" onclick="copiarTexto(this, ${JSON.stringify(slide.texto)})">📋 Copiar texto</button>
     `;
     cont.appendChild(div);
   });
 
   document.getElementById('resultado').classList.add('show');
   document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+  generarGaleriaImagenes();
+}
+
+function elegirEjemplo(campo, btn) {
+  document.getElementById(campo).value = btn.textContent;
+  const grupo = btn.parentElement;
+  grupo.querySelectorAll('.chip').forEach(c => c.classList.remove('chip-selected'));
+  btn.classList.add('chip-selected');
 }
 
 // ===== GENERACIÓN DE IMÁGENES DEL CARRUSEL =====
@@ -440,24 +463,48 @@ async function generarImagenSlide(slide, index, total) {
   return await html2canvas(el, { width: 1080, height: 1080, scale: 1, backgroundColor: null });
 }
 
-async function descargarImagenIndividual(index) {
+let imagenesGeneradas = [];
+
+async function generarGaleriaImagenes() {
   if (!ultimoResultado) return;
   const slides = ultimoResultado.slides || [];
   const total = slides.length;
+  const galeria = document.getElementById('galeriaImagenes');
+  galeria.innerHTML = '<p class="cargando-imgs">🎨 Generando vista previa de tus imágenes...</p>';
+  imagenesGeneradas = [];
+
   try {
-    const canvas = await generarImagenSlide(slides[index], index, total);
-    canvas.toBlob(blob => {
+    for (let i = 0; i < total; i++) {
+      const canvas = await generarImagenSlide(slides[i], i, total);
+      const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+      imagenesGeneradas.push(blob);
+    }
+    galeria.innerHTML = '';
+    imagenesGeneradas.forEach((blob, i) => {
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `slide-${index + 1}.png`;
-      a.click();
-      URL.revokeObjectURL(url);
-    }, 'image/png');
+      const div = document.createElement('div');
+      div.className = 'img-thumb';
+      div.innerHTML = `
+        <img src="${url}" alt="Slide ${i + 1}">
+        <button class="copy-btn" onclick="descargarImagenGuardada(${i})">⬇️ Slide ${i + 1}</button>
+      `;
+      galeria.appendChild(div);
+    });
   } catch (e) {
     console.error(e);
-    alert('No se pudo generar la imagen. Intenta de nuevo.');
+    galeria.innerHTML = '<p class="cargando-imgs" style="color:#e74c3c;">No se pudo generar la vista previa. El botón de ZIP igual intentará generarlas.</p>';
   }
+}
+
+function descargarImagenGuardada(index) {
+  const blob = imagenesGeneradas[index];
+  if (!blob) return;
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `slide-${index + 1}.png`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 async function descargarTodasImagenes() {
@@ -469,14 +516,13 @@ async function descargarTodasImagenes() {
   btn.disabled = true;
 
   try {
-    const zip = new JSZip();
-    for (let i = 0; i < total; i++) {
-      btn.textContent = `Generando imagen ${i + 1}/${total}...`;
-      const canvas = await generarImagenSlide(slides[i], i, total);
-      const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-      zip.file(`slide-${i + 1}.png`, blob);
+    if (imagenesGeneradas.length !== total) {
+      btn.textContent = 'Generando imágenes...';
+      await generarGaleriaImagenes();
     }
     btn.textContent = 'Empaquetando ZIP...';
+    const zip = new JSZip();
+    imagenesGeneradas.forEach((blob, i) => zip.file(`slide-${i + 1}.png`, blob));
     const contenido = await zip.generateAsync({ type: 'blob' });
     const url = URL.createObjectURL(contenido);
     const a = document.createElement('a');
