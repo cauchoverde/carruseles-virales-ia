@@ -8,8 +8,8 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
     font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-    background:#F9FAFB;
-    color:#1F2937;
+    background:#0B1220;
+    color:#E7ECF3;
     line-height:1.5;
   }
   header {
@@ -35,54 +35,56 @@
   }
   .wrap { max-width:760px; margin:-30px auto 60px; padding:0 16px; }
   .card {
-    background:white;
+    background:#131C2E;
+    border:1px solid #232D45;
     border-radius:16px;
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
     padding:28px;
     margin-bottom:24px;
   }
   .plan-status {
     display:flex; justify-content:space-between; align-items:center;
-    margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid #eee;
+    margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid #232D45;
     flex-wrap:wrap; gap:10px;
   }
   .plan-pill {
-    background:#95a5a6; color:white; padding:6px 16px; border-radius:20px;
+    background:#2A3550; color:white; padding:6px 16px; border-radius:20px;
     font-weight:600; font-size:.85rem;
   }
   .plan-pill.pro { background:#10B981; }
-  .usos-txt { color:#666; font-size:.9rem; }
-  label { display:block; font-weight:600; margin-bottom:8px; color:#1F2937; }
+  .usos-txt { color:#94A3B8; font-size:.9rem; }
+  label { display:block; font-weight:600; margin-bottom:8px; color:#E7ECF3; }
   input[type=text] {
-    width:100%; padding:14px; border:2px solid #e5e7eb; border-radius:10px;
-    font-size:1rem; margin-bottom:6px;
+    width:100%; padding:14px; border:2px solid #2A3550; border-radius:10px;
+    font-size:1rem; margin-bottom:6px; background:#0F172A; color:#E7ECF3;
   }
+  input[type=text]::placeholder { color:#64748B; }
   input[type=text]:focus { outline:none; border-color:#10B981; }
-  .ejemplos { font-size:.82rem; color:#888; margin-bottom:10px; }
+  .ejemplos { font-size:.82rem; color:#8592A8; margin-bottom:10px; }
   .chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
   .chip {
-    background:#F3F0FF; color:#6D28D9; border:1px solid #DDD6FE; padding:9px 14px;
+    background:#211A38; color:#C4B5FD; border:1px solid #3F2E66; padding:9px 14px;
     border-radius:20px; font-size:.82rem; cursor:pointer; text-align:left;
     font-family:inherit;
   }
-  .chip:hover { background:#E9E4FF; }
+  .chip:hover { background:#2D2150; }
   .chip.chip-selected { background:#8B5CF6; color:white; border-color:#8B5CF6; }
   .galeria-grid {
     display:flex; overflow-x:auto; gap:14px; scroll-snap-type:x mandatory;
     -webkit-overflow-scrolling:touch; padding:6px 4px 10px; margin:16px 0;
   }
   .galeria-grid::-webkit-scrollbar { height:6px; }
-  .galeria-grid::-webkit-scrollbar-thumb { background:#ddd; border-radius:10px; }
+  .galeria-grid::-webkit-scrollbar-thumb { background:#2A3550; border-radius:10px; }
   .img-thumb { flex:0 0 78%; scroll-snap-align:center; text-align:center; }
   @media (min-width:640px) { .img-thumb { flex:0 0 38%; } }
   .img-thumb img {
     width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:14px;
-    box-shadow:0 4px 14px rgba(0,0,0,.15); display:block; background:#eee;
+    box-shadow:0 4px 14px rgba(0,0,0,.35); display:block; background:#1B2438;
   }
   .img-thumb button { width:100%; margin-top:6px; }
   .cargando-imgs { flex:1 0 100%; text-align:center; color:#8B5CF6; font-weight:600; padding:24px 0; }
   .galeria-dots { display:flex; justify-content:center; gap:6px; margin-bottom:16px; }
-  .galeria-dots .dot { width:7px; height:7px; border-radius:50%; background:#ddd; transition:all .2s; }
+  .galeria-dots .dot { width:7px; height:7px; border-radius:50%; background:#2A3550; transition:all .2s; }
   .galeria-dots .dot.active { background:#8B5CF6; width:20px; border-radius:4px; }
   .img-thumb img { cursor:pointer; }
   .modal-overlay {
@@ -113,24 +115,24 @@
   .btn:disabled { opacity:.6; cursor:not-allowed; transform:none; }
   .btn-green { background:#10B981; }
   .btn-outline {
-    background:white; color:#10B981; border:2px solid #10B981;
+    background:transparent; color:#10B981; border:2px solid #10B981;
   }
   .resultado { display:none; margin-top:24px; }
   .resultado.show { display:block; }
   .titulo-carrusel {
-    font-size:1.2rem; font-weight:700; margin-bottom:16px; color:#1F2937;
+    font-size:1.2rem; font-weight:700; margin-bottom:16px; color:#E7ECF3;
   }
   .slide {
-    background:#F9FAFB; border-left:4px solid #8B5CF6; padding:16px 18px;
+    background:#1B2438; border-left:4px solid #8B5CF6; padding:16px 18px;
     border-radius:8px; margin-bottom:12px;
   }
   .slide h4 { font-size:.78rem; text-transform:uppercase; color:#8B5CF6; margin-bottom:6px; letter-spacing:.03em; }
-  .slide p { font-size:1rem; }
+  .slide p { font-size:1rem; color:#E7ECF3; }
   .copy-btn {
-    background:none; border:1px solid #ddd; padding:6px 12px; border-radius:8px;
-    font-size:.8rem; cursor:pointer; margin-top:8px; color:#555;
+    background:none; border:1px solid #2A3550; padding:6px 12px; border-radius:8px;
+    font-size:.8rem; cursor:pointer; margin-top:8px; color:#B8C2D4;
   }
-  .copy-btn:hover { background:#f0f0f0; }
+  .copy-btn:hover { background:#1E2A45; }
   .slide-actions { display:flex; gap:8px; flex-wrap:wrap; }
   .btn-zip {
     background:#8B5CF6; color:white; border:none; padding:14px 22px;
@@ -139,8 +141,8 @@
   }
   .btn-zip:disabled { opacity:.6; cursor:not-allowed; }
   .limite-box {
-    background:#fff3cd; border:2px solid #ffc107; border-radius:12px;
-    padding:22px; text-align:center; margin-top:16px;
+    background:rgba(245,158,11,.1); border:2px solid #F59E0B; border-radius:12px;
+    padding:22px; text-align:center; margin-top:16px; color:#E7ECF3;
   }
   .limite-box h3 { margin-bottom:8px; }
   .pago-botones { display:flex; gap:12px; margin-top:16px; flex-wrap:wrap; }
@@ -152,7 +154,7 @@
   .pago-btn.cop { background:#FDDA24; color:#1F2937; }
   .pago-btn.usd { background:#2c5cc5; }
   .precio-box { text-align:center; margin:16px 0; }
-  .precio-box .old { text-decoration:line-through; color:#999; font-size:.9rem; }
+  .precio-box .old { text-decoration:line-through; color:#7A879C; font-size:.9rem; }
   .precio-box .new { font-size:2.2rem; font-weight:800; color:#10B981; }
   .activar-toggle {
     text-align:center; margin-top:18px; font-size:.9rem; color:#8B5CF6;
@@ -160,11 +162,11 @@
   }
   .activar-panel { display:none; margin-top:16px; }
   .activar-panel.show { display:block; }
-  .msg-error { color:#e74c3c; font-size:.85rem; margin-top:6px; display:none; }
+  .msg-error { color:#f87171; font-size:.85rem; margin-top:6px; display:none; }
   .msg-ok { color:#10B981; font-size:.85rem; margin-top:6px; display:none; }
   .loading-dots::after { content:'...'; animation:dots 1.2s steps(4,end) infinite; }
   @keyframes dots { 0%,20%{content:'.';} 40%{content:'..';} 60%,100%{content:'...';} }
-  footer { text-align:center; padding:30px 20px; color:#999; font-size:.85rem; }
+  footer { text-align:center; padding:30px 20px; color:#7A879C; font-size:.85rem; }
 </style>
 </head>
 <body>
@@ -203,7 +205,7 @@
     </div>
 
     <div class="paso" id="paso2" style="display:none;">
-      <div id="recapNicho" style="background:#F3F0FF; color:#6D28D9; border-radius:10px; padding:10px 14px; margin-bottom:16px; font-size:.85rem; font-weight:600;"></div>
+      <div id="recapNicho" style="background:#211A38; color:#C4B5FD; border-radius:10px; padding:10px 14px; margin-bottom:16px; font-size:.85rem; font-weight:600;"></div>
       <label for="clienteIdeal">¿Quién es tu cliente ideal?</label>
       <input type="text" id="clienteIdeal" placeholder="Escribe el tuyo o toca un ejemplo abajo...">
       <p class="ejemplos">💡 Mientras más específico, mejor sale el carrusel:</p>
@@ -235,14 +237,14 @@
       <div class="precio-box">
         <p class="old">Antes: $198,000 COP</p>
         <p class="new">$19,000 <span style="font-size:1rem;">COP/mes</span></p>
-        <p style="color:#666; font-size:.85rem;">≈ $5 USD/mes</p>
+        <p style="color:#94A3B8; font-size:.85rem;">≈ $5 USD/mes</p>
       </div>
       <label style="display:flex; align-items:flex-start; gap:8px; font-weight:400; font-size:.85rem; text-align:left; margin-top:16px; cursor:pointer;">
         <input type="checkbox" id="aceptoDatos" onchange="toggleBotonesPago()" style="margin-top:3px;">
         <span>
           Autorizo el tratamiento de mis datos personales (correo) para procesar mi pago y enviarme mi código de acceso, conforme a la Ley 1581 de 2012.
           <details style="display:inline; font-size:.8rem;"><summary style="display:inline; color:#8B5CF6; cursor:pointer;">Ver política</summary>
-            <p style="margin-top:6px; color:#666;">CauchoVerde Digital usa tu correo únicamente para enviarte tu código de acceso y responder tus dudas sobre la compra. No lo compartimos ni lo usamos para otros fines. Puedes pedir que lo eliminemos escribiendo a jhon@cauchoverde.com.</p>
+            <p style="margin-top:6px; color:#94A3B8;">CauchoVerde Digital usa tu correo únicamente para enviarte tu código de acceso y responder tus dudas sobre la compra. No lo compartimos ni lo usamos para otros fines. Puedes pedir que lo eliminemos escribiendo a jhon@cauchoverde.com.</p>
           </details>
         </span>
       </label>
@@ -517,7 +519,7 @@ function mostrarResultado(data) {
   });
 
   if (!algunCopy) {
-    cont.innerHTML = '<p style="color:#999; font-size:.85rem; text-align:center; padding:10px 0;">Tus imágenes están listas. (Falta activar los copys de redes sociales en el generador — pídele a soporte que actualice el prompt.)</p>';
+    cont.innerHTML = '<p style="color:#94A3B8; font-size:.85rem; text-align:center; padding:10px 0;">Tus imágenes están listas. (Falta activar los copys de redes sociales en el generador — pídele a soporte que actualice el prompt.)</p>';
   }
 
   document.getElementById('resultado').classList.add('show');
@@ -641,7 +643,7 @@ async function generarGaleriaImagenes() {
     configurarScrollGaleria();
   } catch (e) {
     console.error(e);
-    galeria.innerHTML = '<p class="cargando-imgs" style="color:#e74c3c;">No se pudo generar la vista previa. El botón de ZIP igual intentará generarlas.</p>';
+    galeria.innerHTML = '<p class="cargando-imgs" style="color:#f87171;">No se pudo generar la vista previa. El botón de ZIP igual intentará generarlas.</p>';
   }
 }
 
