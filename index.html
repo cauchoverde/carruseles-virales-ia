@@ -189,12 +189,7 @@
       <label for="clienteIdeal">¿Quién es tu cliente ideal?</label>
       <input type="text" id="clienteIdeal" placeholder="Escribe el tuyo o toca un ejemplo abajo...">
       <p class="ejemplos">💡 Mientras más específico, mejor sale el carrusel:</p>
-      <div class="chips" id="chipsCliente">
-        <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Mujeres 25-40 años, freelancers que buscan verse profesionales</button>
-        <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Dueños de restaurantes sin equipo de marketing</button>
-        <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Profesionales que necesitan inglés para el trabajo</button>
-        <button type="button" class="chip" onclick="elegirEjemplo('clienteIdeal', this)">Madres que buscan postres saludables para sus hijos</button>
-      </div>
+      <div class="chips" id="chipsCliente"></div>
       <button class="btn btn-outline" onclick="irPaso1()" style="margin-bottom:10px;">← Atrás</button>
       <button class="btn" id="btnGenerar" onclick="generarCarrusel()">Generar Carrusel Viral</button>
     </div>
@@ -204,7 +199,7 @@
       <div class="galeria-grid" id="galeriaImagenes"></div>
       <button class="btn-zip" id="btnDescargarZip" onclick="descargarTodasImagenes()">📥 Descargar todas las imágenes (ZIP)</button>
       <div id="slidesContainer"></div>
-      <button class="copy-btn" onclick="copiarTodo()" style="width:100%; margin-top:8px;">📋 Copiar todos los textos</button>
+      <button class="copy-btn" onclick="copiarTodo()" style="width:100%; margin-top:8px;">📋 Copiar todos los copys</button>
     </div>
 
     <div id="slideRender" style="position:absolute; left:-9999px; top:-9999px; width:1080px; height:1080px; overflow:hidden; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
@@ -269,6 +264,46 @@
 const WEBHOOK_GENERADOR = 'https://hook.us2.make.com/63x6utidymy4g0a0avp94ub2z3ekt17e';
 const WEBHOOK_VERIFICAR = 'https://hook.us2.make.com/tj8iosdg332kbbjnnw3ijvsejst9j5l8';
 const LIMITE_GRATIS = 3;
+
+// Opciones de "cliente ideal" filtradas según el nicho elegido en el paso 1
+const CLIENTE_POR_NICHO = {
+  'Vendo ropa cómoda para emprendedoras': [
+    'Mujeres 25-40 años que buscan verse profesionales sin sacrificar comodidad',
+    'Emprendedoras que trabajan desde casa y quieren ropa versátil',
+    'Mujeres activas que necesitan ropa cómoda todo el día'
+  ],
+  'Diseño logos para pequeños negocios': [
+    'Dueños de negocios nuevos sin identidad visual definida',
+    'Emprendedores que están lanzando su marca por primera vez',
+    'Pequeños negocios que quieren verse más profesionales'
+  ],
+  'Doy asesorías de marketing digital': [
+    'Dueños de negocios que no saben por dónde empezar en redes sociales',
+    'Emprendedores que invierten en publicidad sin buenos resultados',
+    'Pequeñas empresas sin equipo de marketing'
+  ],
+  'Vendo postres saludables sin azúcar': [
+    'Madres que buscan opciones saludables para sus hijos',
+    'Personas que cuidan su alimentación o el azúcar',
+    'Adultos que quieren comer rico sin culpa'
+  ],
+  'Hago páginas web para restaurantes': [
+    'Dueños de restaurantes sin equipo de marketing',
+    'Restaurantes que quieren recibir pedidos online',
+    'Negocios de comida sin presencia digital'
+  ],
+  'Enseño inglés a profesionales': [
+    'Profesionales que necesitan inglés para el trabajo',
+    'Freelancers que quieren atender clientes internacionales',
+    'Personas que buscan ascender y necesitan inglés de negocios'
+  ]
+};
+const CLIENTE_GENERICO = [
+  'Mujeres 25-40 años que buscan verse profesionales',
+  'Dueños de pequeños negocios sin equipo de marketing',
+  'Emprendedores que están empezando su marca',
+  'Profesionales que quieren crecer en su carrera'
+];
 
 let planActual = 'GRATIS';
 let usos = 0;
@@ -422,16 +457,31 @@ function mostrarResultado(data) {
   const cont = document.getElementById('slidesContainer');
   cont.innerHTML = '';
 
-  (data.slides || []).forEach((slide, idx) => {
+  const copys = data.copys || {};
+  const redes = [
+    { key: 'instagram', nombre: '📸 Copy para Instagram' },
+    { key: 'tiktok', nombre: '🎵 Copy para TikTok' },
+    { key: 'facebook', nombre: '👍 Copy para Facebook' }
+  ];
+
+  let algunCopy = false;
+  redes.forEach(red => {
+    const texto = copys[red.key];
+    if (!texto) return;
+    algunCopy = true;
     const div = document.createElement('div');
     div.className = 'slide';
     div.innerHTML = `
-      <h4>Slide ${slide.numero} — ${slide.tipo || ''}</h4>
-      <p>${slide.texto}</p>
-      <button class="copy-btn" onclick="copiarTexto(this, ${JSON.stringify(slide.texto)})">📋 Copiar texto</button>
+      <h4>${red.nombre}</h4>
+      <p style="white-space:pre-wrap;">${texto}</p>
+      <button class="copy-btn" onclick="copiarTexto(this, ${JSON.stringify(texto)})">📋 Copiar</button>
     `;
     cont.appendChild(div);
   });
+
+  if (!algunCopy) {
+    cont.innerHTML = '<p style="color:#999; font-size:.85rem; text-align:center; padding:10px 0;">Tus imágenes están listas. (Falta activar los copys de redes sociales en el generador — pídele a soporte que actualice el prompt.)</p>';
+  }
 
   document.getElementById('resultado').classList.add('show');
   document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
@@ -454,9 +504,26 @@ function irPaso2() {
     alert('Cuéntanos qué vendes o haces antes de continuar.');
     return;
   }
+  actualizarChipsCliente(nicho);
   document.getElementById('paso1').style.display = 'none';
   document.getElementById('paso2').style.display = 'block';
   document.getElementById('paso2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function actualizarChipsCliente(nicho) {
+  const opciones = CLIENTE_POR_NICHO[nicho] || CLIENTE_GENERICO;
+  const cont = document.getElementById('chipsCliente');
+  cont.innerHTML = '';
+  const clienteInput = document.getElementById('clienteIdeal');
+  clienteInput.value = '';
+  opciones.forEach(texto => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'chip';
+    btn.textContent = texto;
+    btn.onclick = function () { elegirEjemplo('clienteIdeal', this); };
+    cont.appendChild(btn);
+  });
 }
 
 function irPaso1() {
@@ -609,13 +676,21 @@ function copiarTexto(btn, texto) {
 }
 
 function copiarTodo() {
-  if (!ultimoResultado) return;
-  let texto = (ultimoResultado.titulo_carrusel || '') + '\n\n';
-  (ultimoResultado.slides || []).forEach(s => {
-    texto += `Slide ${s.numero}: ${s.texto}\n\n`;
-  });
-  navigator.clipboard.writeText(texto).then(() => {
-    alert('Carrusel completo copiado al portapapeles.');
+  if (!ultimoResultado || !ultimoResultado.copys) {
+    alert('Todavía no hay copys generados.');
+    return;
+  }
+  const c = ultimoResultado.copys;
+  let texto = '';
+  if (c.instagram) texto += '📸 INSTAGRAM:\n' + c.instagram + '\n\n';
+  if (c.tiktok) texto += '🎵 TIKTOK:\n' + c.tiktok + '\n\n';
+  if (c.facebook) texto += '👍 FACEBOOK:\n' + c.facebook + '\n\n';
+  if (!texto) {
+    alert('Todavía no hay copys generados.');
+    return;
+  }
+  navigator.clipboard.writeText(texto.trim()).then(() => {
+    alert('Todos los copys fueron copiados al portapapeles.');
   });
 }
 </script>
