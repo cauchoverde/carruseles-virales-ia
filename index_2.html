@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carruseles Virales IA - CauchoVerde Digital</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background:#F9FAFB;
+    color:#1F2937;
+    line-height:1.5;
+  }
+  header {
+    background:linear-gradient(135deg,#10B981 0%,#0d9467 100%);
+    color:white;
+    padding:32px 20px 60px;
+    text-align:center;
+  }
+  header img.logo { width:52px; height:52px; object-fit:contain; margin-bottom:10px; border-radius:12px; background:white; padding:6px; }
+  header h1 { font-size:1.7rem; margin-bottom:8px; }
+  header p { opacity:.95; font-size:1rem; }
+  @media (min-width:640px) {
+    header h1 { font-size:2rem; }
+    header p { font-size:1.05rem; }
+  }
+  .badge-row { margin-top:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .badge {
+    background:rgba(255,255,255,.18);
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:.85rem;
+  }
+  .wrap { max-width:760px; margin:-30px auto 60px; padding:0 16px; }
+  .card {
+    background:white;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    padding:28px;
+    margin-bottom:24px;
+  }
+  .plan-status {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:20px; padding-bottom:16px; border-bottom:1px solid #eee;
+    flex-wrap:wrap; gap:10px;
+  }
+  .plan-pill {
+    background:#95a5a6; color:white; padding:6px 16px; border-radius:20px;
+    font-weight:600; font-size:.85rem;
+  }
+  .plan-pill.pro { background:#10B981; }
+  .usos-txt { color:#666; font-size:.9rem; }
+  label { display:block; font-weight:600; margin-bottom:8px; color:#1F2937; }
+  input[type=text] {
+    width:100%; padding:14px; border:2px solid #e5e7eb; border-radius:10px;
+    font-size:1rem; margin-bottom:6px;
+  }
+  input[type=text]:focus { outline:none; border-color:#10B981; }
+  .ejemplos { font-size:.82rem; color:#888; margin-bottom:20px; }
+  .btn {
+    background:#8B5CF6; color:white; border:none; padding:16px 30px;
+    border-radius:12px; font-size:1.05rem; font-weight:700; cursor:pointer;
+    width:100%; transition:transform .15s, opacity .15s;
+  }
+  .btn:hover { transform:translateY(-1px); }
+  .btn:disabled { opacity:.6; cursor:not-allowed; transform:none; }
+  .btn-green { background:#10B981; }
+  .btn-outline {
+    background:white; color:#10B981; border:2px solid #10B981;
+  }
+  .resultado { display:none; margin-top:24px; }
+  .resultado.show { display:block; }
+  .titulo-carrusel {
+    font-size:1.2rem; font-weight:700; margin-bottom:16px; color:#1F2937;
+  }
+  .slide {
+    background:#F9FAFB; border-left:4px solid #8B5CF6; padding:16px 18px;
+    border-radius:8px; margin-bottom:12px;
+  }
+  .slide h4 { font-size:.78rem; text-transform:uppercase; color:#8B5CF6; margin-bottom:6px; letter-spacing:.03em; }
+  .slide p { font-size:1rem; }
+  .copy-btn {
+    background:none; border:1px solid #ddd; padding:6px 12px; border-radius:8px;
+    font-size:.8rem; cursor:pointer; margin-top:8px; color:#555;
+  }
+  .copy-btn:hover { background:#f0f0f0; }
+  .limite-box {
+    background:#fff3cd; border:2px solid #ffc107; border-radius:12px;
+    padding:22px; text-align:center; margin-top:16px;
+  }
+  .limite-box h3 { margin-bottom:8px; }
+  .pago-botones { display:flex; gap:12px; margin-top:16px; flex-wrap:wrap; }
+  .pago-botones a { flex:1; min-width:200px; }
+  .pago-btn {
+    display:block; text-align:center; padding:14px; border-radius:10px;
+    font-weight:700; text-decoration:none; color:white; font-size:.95rem;
+  }
+  .pago-btn.cop { background:#FDDA24; color:#1F2937; }
+  .pago-btn.usd { background:#2c5cc5; }
+  .precio-box { text-align:center; margin:16px 0; }
+  .precio-box .old { text-decoration:line-through; color:#999; font-size:.9rem; }
+  .precio-box .new { font-size:2.2rem; font-weight:800; color:#10B981; }
+  .activar-toggle {
+    text-align:center; margin-top:18px; font-size:.9rem; color:#8B5CF6;
+    cursor:pointer; text-decoration:underline;
+  }
+  .activar-panel { display:none; margin-top:16px; }
+  .activar-panel.show { display:block; }
+  .msg-error { color:#e74c3c; font-size:.85rem; margin-top:6px; display:none; }
+  .msg-ok { color:#10B981; font-size:.85rem; margin-top:6px; display:none; }
+  .loading-dots::after { content:'...'; animation:dots 1.2s steps(4,end) infinite; }
+  @keyframes dots { 0%,20%{content:'.';} 40%{content:'..';} 60%,100%{content:'...';} }
+  footer { text-align:center; padding:30px 20px; color:#999; font-size:.85rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://cauchoverde-microactivos.vercel.app/logo.png" alt="CauchoVerde" class="logo">
+  <h1>✨ Carruseles Virales IA</h1>
+  <p>De idea a carrusel listo para Instagram en 3 minutos</p>
+  <div class="badge-row">
+    <span class="badge">Sin experiencia en diseño</span>
+    <span class="badge">Estructura probada de 7 slides</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <div class="plan-status">
+      <span class="plan-pill" id="planBadge">GRATIS</span>
+      <span class="usos-txt" id="usosTexto"></span>
+    </div>
+
+    <label for="nicho">¿Qué vendes o haces?</label>
+    <input type="text" id="nicho" list="ejemplosNicho" placeholder="Escribe o elige un ejemplo...">
+    <datalist id="ejemplosNicho">
+      <option value="Vendo ropa cómoda para emprendedoras">
+      <option value="Diseño logos para pequeños negocios">
+      <option value="Doy asesorías de marketing digital">
+      <option value="Vendo postres saludables sin azúcar">
+      <option value="Hago páginas web para restaurantes">
+      <option value="Enseño inglés a profesionales">
+    </datalist>
+    <p class="ejemplos">💡 Puedes escribir el tuyo o elegir uno de la lista.</p>
+
+    <label for="clienteIdeal">¿Quién es tu cliente ideal?</label>
+    <input type="text" id="clienteIdeal" list="ejemplosCliente" placeholder="Escribe o elige un ejemplo...">
+    <datalist id="ejemplosCliente">
+      <option value="Mujeres 25-40 años, freelancers que buscan verse profesionales">
+      <option value="Dueños de restaurantes sin equipo de marketing">
+      <option value="Profesionales que necesitan inglés para el trabajo">
+      <option value="Madres que buscan postres saludables para sus hijos">
+    </datalist>
+    <p class="ejemplos">💡 Mientras más específico, mejor sale el carrusel.</p>
+
+    <button class="btn" id="btnGenerar" onclick="generarCarrusel()">Generar Carrusel Viral</button>
+
+    <div class="resultado" id="resultado">
+      <div class="titulo-carrusel" id="tituloCarrusel"></div>
+      <div id="slidesContainer"></div>
+      <button class="copy-btn" onclick="copiarTodo()" style="width:100%; margin-top:8px;">📋 Copiar todos los textos</button>
+    </div>
+
+    <div class="limite-box" id="limiteBox" style="display:none;">
+      <h3>⚠️ Llegaste al límite gratis de este mes</h3>
+      <p>Actualiza a PRO para generar carruseles ilimitados.</p>
+      <div class="precio-box">
+        <p class="old">Antes: $198,000 COP</p>
+        <p class="new">$19,000 <span style="font-size:1rem;">COP/mes</span></p>
+        <p style="color:#666; font-size:.85rem;">≈ $5 USD/mes</p>
+      </div>
+      <label style="display:flex; align-items:flex-start; gap:8px; font-weight:400; font-size:.85rem; text-align:left; margin-top:16px; cursor:pointer;">
+        <input type="checkbox" id="aceptoDatos" onchange="toggleBotonesPago()" style="margin-top:3px;">
+        <span>
+          Autorizo el tratamiento de mis datos personales (correo) para procesar mi pago y enviarme mi código de acceso, conforme a la Ley 1581 de 2012.
+          <details style="display:inline; font-size:.8rem;"><summary style="display:inline; color:#8B5CF6; cursor:pointer;">Ver política</summary>
+            <p style="margin-top:6px; color:#666;">CauchoVerde Digital usa tu correo únicamente para enviarte tu código de acceso y responder tus dudas sobre la compra. No lo compartimos ni lo usamos para otros fines. Puedes pedir que lo eliminemos escribiendo a jhon@cauchoverde.com.</p>
+          </details>
+        </span>
+      </label>
+      <div class="pago-botones" id="pagoBotones" style="opacity:.4; pointer-events:none;">
+        <a href="https://mpago.li/2YVxsdo" target="_blank" class="pago-btn cop">Pagar en COP 🇨🇴</a>
+        <a href="https://payco.link/822296af-db78-47c4-bb2b-717cab157a7d" target="_blank" class="pago-btn usd">Pagar en USD 🌎</a>
+      </div>
+    </div>
+
+    <div class="activar-toggle" onclick="toggleActivar()">¿Ya tienes tu código PRO? Actívalo aquí</div>
+    <div class="activar-panel" id="activarPanel">
+      <label for="codigoInput">Código de acceso</label>
+      <input type="text" id="codigoInput" placeholder="Ej: ABC123XYZ">
+      <button class="btn btn-outline" onclick="activarCodigo()">Activar acceso PRO</button>
+      <p class="msg-error" id="errorActivar">Código inválido. Verifica el email que te enviamos.</p>
+      <p class="msg-ok" id="okActivar">✅ ¡Acceso PRO activado!</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  CauchoVerde Digital · Estratégico · Sostenible<br>
+  ¿Dudas? Escríbenos: jhon@cauchoverde.com
+</footer>
+
+<script>
+// ===== CONFIGURACIÓN =====
+const WEBHOOK_GENERADOR = 'https://hook.us2.make.com/63x6utidymy4g0a0avp94ub2z3ekt17e';
+const WEBHOOK_VERIFICAR = 'https://hook.us2.make.com/tj8iosdg332kbbjnnw3ijvsejst9j5l8';
+const LIMITE_GRATIS = 3;
+
+let planActual = 'GRATIS';
+let usos = 0;
+let ultimoResultado = null;
+
+window.onload = function () {
+  verificarAcceso();
+  actualizarUI();
+  // Si vienen de activar.html con ?code= directo en index, intenta activar solo
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('code')) {
+    document.getElementById('codigoInput').value = params.get('code');
+    toggleActivar();
+    activarCodigo();
+  }
+};
+
+function verificarAcceso() {
+  const codigoPRO = localStorage.getItem('cauchoverde_codigo_pro');
+  if (codigoPRO) planActual = 'PRO';
+
+  const mesActual = new Date().toISOString().slice(0, 7);
+  const usosGuardados = JSON.parse(localStorage.getItem('cauchoverde_usos') || '{}');
+  if (usosGuardados.mes === mesActual) {
+    usos = usosGuardados.usos || 0;
+  } else {
+    usos = 0;
+    guardarUsos();
+  }
+}
+
+function guardarUsos() {
+  const mesActual = new Date().toISOString().slice(0, 7);
+  localStorage.setItem('cauchoverde_usos', JSON.stringify({ mes: mesActual, usos: usos }));
+}
+
+function actualizarUI() {
+  const badge = document.getElementById('planBadge');
+  const usosTexto = document.getElementById('usosTexto');
+  if (planActual === 'PRO') {
+    badge.textContent = 'PRO ⭐';
+    badge.classList.add('pro');
+    usosTexto.textContent = '✨ Generaciones ilimitadas';
+  } else {
+    badge.textContent = 'GRATIS';
+    badge.classList.remove('pro');
+    usosTexto.textContent = `${Math.max(0, LIMITE_GRATIS - usos)} generaciones gratis restantes este mes`;
+  }
+}
+
+function toggleBotonesPago() {
+  const check = document.getElementById('aceptoDatos');
+  const botones = document.getElementById('pagoBotones');
+  if (check.checked) {
+    botones.style.opacity = '1';
+    botones.style.pointerEvents = 'auto';
+  } else {
+    botones.style.opacity = '.4';
+    botones.style.pointerEvents = 'none';
+  }
+}
+
+function toggleActivar() {
+  document.getElementById('activarPanel').classList.toggle('show');
+}
+
+async function activarCodigo() {
+  const codigo = document.getElementById('codigoInput').value.trim();
+  const errorEl = document.getElementById('errorActivar');
+  const okEl = document.getElementById('okActivar');
+  errorEl.style.display = 'none';
+  okEl.style.display = 'none';
+
+  if (!codigo) return;
+
+  try {
+    const resp = await fetch(WEBHOOK_VERIFICAR, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ codigo: codigo })
+    });
+    const data = await resp.json();
+    if (data.valido) {
+      localStorage.setItem('cauchoverde_codigo_pro', codigo);
+      localStorage.setItem('cauchoverde_email_pro', data.email || '');
+      planActual = 'PRO';
+      actualizarUI();
+      okEl.style.display = 'block';
+      document.getElementById('limiteBox').style.display = 'none';
+    } else {
+      errorEl.style.display = 'block';
+    }
+  } catch (e) {
+    errorEl.textContent = 'Error al verificar. Intenta de nuevo.';
+    errorEl.style.display = 'block';
+  }
+}
+
+async function generarCarrusel() {
+  if (planActual === 'GRATIS' && usos >= LIMITE_GRATIS) {
+    document.getElementById('limiteBox').style.display = 'block';
+    document.getElementById('limiteBox').scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+
+  const nicho = document.getElementById('nicho').value.trim();
+  const clienteIdeal = document.getElementById('clienteIdeal').value.trim();
+
+  if (!nicho || !clienteIdeal) {
+    alert('Completa los dos campos antes de generar.');
+    return;
+  }
+
+  const btn = document.getElementById('btnGenerar');
+  const textoOriginal = btn.textContent;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-dots">Generando con IA</span>';
+
+  try {
+    const resp = await fetch(WEBHOOK_GENERADOR, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nicho: nicho, cliente_ideal: clienteIdeal })
+    });
+
+    if (!resp.ok) throw new Error('Respuesta no válida del servidor');
+
+    let texto = await resp.text();
+    texto = texto.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+
+    const data = JSON.parse(texto);
+    mostrarResultado(data);
+
+    if (planActual === 'GRATIS') {
+      usos++;
+      guardarUsos();
+      actualizarUI();
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Hubo un error generando tu carrusel. Intenta de nuevo en unos segundos.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = textoOriginal;
+  }
+}
+
+function mostrarResultado(data) {
+  ultimoResultado = data;
+  document.getElementById('tituloCarrusel').textContent = '✅ ' + (data.titulo_carrusel || 'Tu carrusel');
+  const cont = document.getElementById('slidesContainer');
+  cont.innerHTML = '';
+
+  (data.slides || []).forEach(slide => {
+    const div = document.createElement('div');
+    div.className = 'slide';
+    div.innerHTML = `
+      <h4>Slide ${slide.numero} — ${slide.tipo || ''}</h4>
+      <p>${slide.texto}</p>
+      <button class="copy-btn" onclick="copiarTexto(this, ${JSON.stringify(slide.texto)})">Copiar</button>
+    `;
+    cont.appendChild(div);
+  });
+
+  document.getElementById('resultado').classList.add('show');
+  document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+}
+
+function copiarTexto(btn, texto) {
+  navigator.clipboard.writeText(texto).then(() => {
+    const original = btn.textContent;
+    btn.textContent = '✅ Copiado';
+    setTimeout(() => btn.textContent = original, 1500);
+  });
+}
+
+function copiarTodo() {
+  if (!ultimoResultado) return;
+  let texto = (ultimoResultado.titulo_carrusel || '') + '\n\n';
+  (ultimoResultado.slides || []).forEach(s => {
+    texto += `Slide ${s.numero}: ${s.texto}\n\n`;
+  });
+  navigator.clipboard.writeText(texto).then(() => {
+    alert('Carrusel completo copiado al portapapeles.');
+  });
+}
+</script>
+</body>
+</html>
