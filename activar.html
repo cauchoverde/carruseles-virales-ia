@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activar acceso PRO - CauchoVerde</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#10B981 0%,#0d9467 100%);
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .card {
+    background:white; padding:50px 40px; border-radius:20px;
+    box-shadow:0 20px 60px rgba(0,0,0,.3); text-align:center; max-width:460px; width:100%;
+  }
+  .loading { color:#10B981; font-size:1.1rem; }
+  .success { color:#10B981; }
+  .error { color:#e74c3c; }
+  .btn {
+    background:#10B981; color:white; padding:15px 36px; border:none;
+    border-radius:50px; font-size:1rem; font-weight:700; cursor:pointer;
+    margin-top:22px; text-decoration:none; display:inline-block;
+  }
+  p { color:#555; margin-top:12px; line-height:1.5; }
+  .spinner {
+    width:36px; height:36px; border:4px solid #e5e7eb; border-top-color:#10B981;
+    border-radius:50%; margin:0 auto 16px; animation:spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div id="mensaje">
+      <div class="spinner"></div>
+      <p class="loading">Verificando tu código de acceso...</p>
+    </div>
+    <div id="acciones"></div>
+  </div>
+
+  <script>
+    const WEBHOOK_VERIFICAR = 'https://hook.us2.make.com/tj8iosdg332kbbjnnw3ijvsejst9j5l8';
+
+    window.onload = async function () {
+      const params = new URLSearchParams(window.location.search);
+      const codigo = params.get('code');
+
+      if (!codigo) {
+        mostrarError('No se encontró ningún código en el link. Usa el botón del email que te enviamos.');
+        return;
+      }
+
+      try {
+        const resp = await fetch(WEBHOOK_VERIFICAR, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ codigo: codigo })
+        });
+        const data = await resp.json();
+
+        if (data.valido) {
+          localStorage.setItem('cauchoverde_codigo_pro', codigo);
+          localStorage.setItem('cauchoverde_email_pro', data.email || '');
+          mostrarExito();
+        } else {
+          mostrarError('Ese código no es válido o ya expiró. Revisa el email o escríbenos.');
+        }
+      } catch (e) {
+        mostrarError('No pudimos verificar el código ahora mismo. Intenta de nuevo en un momento.');
+      }
+    };
+
+    function mostrarExito() {
+      document.getElementById('mensaje').innerHTML = `
+        <h2 class="success">✅ ¡Acceso PRO activado!</h2>
+        <p>Ya tienes generación ilimitada de carruseles.</p>
+      `;
+      document.getElementById('acciones').innerHTML = `
+        <a href="index.html" class="btn">Ir a la herramienta</a>
+      `;
+    }
+
+    function mostrarError(msg) {
+      document.getElementById('mensaje').innerHTML = `
+        <h2 class="error">❌ Algo no cuadró</h2>
+        <p>${msg}</p>
+      `;
+      document.getElementById('acciones').innerHTML = `
+        <a href="index.html" class="btn">Volver al inicio</a>
+      `;
+    }
+  </script>
+</body>
+</html>
