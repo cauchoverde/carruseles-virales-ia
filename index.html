@@ -203,6 +203,7 @@
     </div>
 
     <div class="paso" id="paso2" style="display:none;">
+      <div id="recapNicho" style="background:#F3F0FF; color:#6D28D9; border-radius:10px; padding:10px 14px; margin-bottom:16px; font-size:.85rem; font-weight:600;"></div>
       <label for="clienteIdeal">¿Quién es tu cliente ideal?</label>
       <input type="text" id="clienteIdeal" placeholder="Escribe el tuyo o toca un ejemplo abajo...">
       <p class="ejemplos">💡 Mientras más específico, mejor sale el carrusel:</p>
@@ -493,13 +494,25 @@ function mostrarResultado(data) {
     const texto = copys[red.key];
     if (!texto) return;
     algunCopy = true;
+
     const div = document.createElement('div');
     div.className = 'slide';
-    div.innerHTML = `
-      <h4>${red.nombre}</h4>
-      <p style="white-space:pre-wrap;">${texto}</p>
-      <button class="copy-btn" onclick="copiarTexto(this, ${JSON.stringify(texto)})">📋 Copiar</button>
-    `;
+
+    const h4 = document.createElement('h4');
+    h4.textContent = red.nombre;
+
+    const p = document.createElement('p');
+    p.style.whiteSpace = 'pre-wrap';
+    p.textContent = texto;
+
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = '📋 Copiar';
+    btn.addEventListener('click', () => copiarTexto(btn, texto));
+
+    div.appendChild(h4);
+    div.appendChild(p);
+    div.appendChild(btn);
     cont.appendChild(div);
   });
 
@@ -517,9 +530,6 @@ function elegirEjemplo(campo, btn) {
   const grupo = btn.parentElement;
   grupo.querySelectorAll('.chip').forEach(c => c.classList.remove('chip-selected'));
   btn.classList.add('chip-selected');
-  if (campo === 'nicho') {
-    setTimeout(irPaso2, 250);
-  }
 }
 
 function irPaso2() {
@@ -529,6 +539,7 @@ function irPaso2() {
     return;
   }
   actualizarChipsCliente(nicho);
+  document.getElementById('recapNicho').textContent = '📌 Tu negocio: ' + nicho;
   document.getElementById('paso1').style.display = 'none';
   document.getElementById('paso2').style.display = 'block';
   document.getElementById('paso2').scrollIntoView({ behavior: 'smooth', block: 'start' });
