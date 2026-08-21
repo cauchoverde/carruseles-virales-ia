@@ -85,6 +85,13 @@
     font-size:.8rem; cursor:pointer; margin-top:8px; color:#555;
   }
   .copy-btn:hover { background:#f0f0f0; }
+  .slide-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .btn-zip {
+    background:#8B5CF6; color:white; border:none; padding:14px 22px;
+    border-radius:10px; font-weight:700; cursor:pointer; width:100%;
+    margin-bottom:14px; font-size:.95rem;
+  }
+  .btn-zip:disabled { opacity:.6; cursor:not-allowed; }
   .limite-box {
     background:#fff3cd; border:2px solid #ffc107; border-radius:12px;
     padding:22px; text-align:center; margin-top:16px;
@@ -160,8 +167,17 @@
 
     <div class="resultado" id="resultado">
       <div class="titulo-carrusel" id="tituloCarrusel"></div>
+      <button class="btn-zip" id="btnDescargarZip" onclick="descargarTodasImagenes()">📥 Descargar todas las imágenes (ZIP)</button>
       <div id="slidesContainer"></div>
       <button class="copy-btn" onclick="copiarTodo()" style="width:100%; margin-top:8px;">📋 Copiar todos los textos</button>
+    </div>
+
+    <div id="slideRender" style="position:absolute; left:-9999px; top:-9999px; width:1080px; height:1080px; overflow:hidden; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+      <div id="slideRenderInner" style="width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:100px; text-align:center; box-sizing:border-box; position:relative;">
+        <div id="slideRenderBadge" style="position:absolute; top:50px; right:60px; padding:10px 26px; border-radius:30px; font-weight:700; font-size:28px;"></div>
+        <div id="slideRenderTexto" style="font-weight:800; line-height:1.35; max-width:900px;"></div>
+        <div id="slideRenderFooter" style="position:absolute; bottom:50px; font-size:26px; font-weight:700;">✨ CauchoVerde · cauchoverde.com</div>
+      </div>
     </div>
 
     <div class="limite-box" id="limiteBox" style="display:none;">
@@ -204,6 +220,8 @@
   ¿Dudas? Escríbenos: jhon@cauchoverde.com
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 // ===== CONFIGURACIÓN =====
 const WEBHOOK_GENERADOR = 'https://hook.us2.make.com/63x6utidymy4g0a0avp94ub2z3ekt17e';
@@ -362,19 +380,117 @@ function mostrarResultado(data) {
   const cont = document.getElementById('slidesContainer');
   cont.innerHTML = '';
 
-  (data.slides || []).forEach(slide => {
+  (data.slides || []).forEach((slide, idx) => {
     const div = document.createElement('div');
     div.className = 'slide';
     div.innerHTML = `
       <h4>Slide ${slide.numero} — ${slide.tipo || ''}</h4>
       <p>${slide.texto}</p>
-      <button class="copy-btn" onclick="copiarTexto(this, ${JSON.stringify(slide.texto)})">Copiar</button>
+      <div class="slide-actions">
+        <button class="copy-btn" onclick="copiarTexto(this, ${JSON.stringify(slide.texto)})">📋 Copiar texto</button>
+        <button class="copy-btn" onclick="descargarImagenIndividual(${idx})">🖼️ Descargar imagen</button>
+      </div>
     `;
     cont.appendChild(div);
   });
 
   document.getElementById('resultado').classList.add('show');
   document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ===== GENERACIÓN DE IMÁGENES DEL CARRUSEL =====
+function tamanoFuente(texto) {
+  const len = (texto || '').length;
+  if (len > 220) return '30px';
+  if (len > 150) return '36px';
+  if (len > 90) return '42px';
+  return '52px';
+}
+
+function prepararSlideRender(slide, index, total) {
+  const inner = document.getElementById('slideRenderInner');
+  const badge = document.getElementById('slideRenderBadge');
+  const texto = document.getElementById('slideRenderTexto');
+  const footer = document.getElementById('slideRenderFooter');
+  const esExtremo = (index === 0 || index === total - 1);
+
+  if (esExtremo) {
+    inner.style.background = 'linear-gradient(135deg,#10B981 0%,#059669 50%,#8B5CF6 100%)';
+    texto.style.color = 'white';
+    badge.style.background = 'rgba(255,255,255,.25)';
+    badge.style.color = 'white';
+    footer.style.color = 'rgba(255,255,255,.9)';
+  } else {
+    inner.style.background = '#F9FAFB';
+    texto.style.color = '#1F2937';
+    badge.style.background = '#10B981';
+    badge.style.color = 'white';
+    footer.style.color = '#888';
+  }
+
+  badge.textContent = (index + 1) + '/' + total;
+  texto.style.fontSize = tamanoFuente(slide.texto);
+  texto.textContent = slide.texto || '';
+}
+
+async function generarImagenSlide(slide, index, total) {
+  prepararSlideRender(slide, index, total);
+  await new Promise(r => setTimeout(r, 60));
+  const el = document.getElementById('slideRender');
+  return await html2canvas(el, { width: 1080, height: 1080, scale: 1, backgroundColor: null });
+}
+
+async function descargarImagenIndividual(index) {
+  if (!ultimoResultado) return;
+  const slides = ultimoResultado.slides || [];
+  const total = slides.length;
+  try {
+    const canvas = await generarImagenSlide(slides[index], index, total);
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `slide-${index + 1}.png`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  } catch (e) {
+    console.error(e);
+    alert('No se pudo generar la imagen. Intenta de nuevo.');
+  }
+}
+
+async function descargarTodasImagenes() {
+  if (!ultimoResultado) return;
+  const slides = ultimoResultado.slides || [];
+  const total = slides.length;
+  const btn = document.getElementById('btnDescargarZip');
+  const original = btn.textContent;
+  btn.disabled = true;
+
+  try {
+    const zip = new JSZip();
+    for (let i = 0; i < total; i++) {
+      btn.textContent = `Generando imagen ${i + 1}/${total}...`;
+      const canvas = await generarImagenSlide(slides[i], i, total);
+      const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+      zip.file(`slide-${i + 1}.png`, blob);
+    }
+    btn.textContent = 'Empaquetando ZIP...';
+    const contenido = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(contenido);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'carrusel-cauchoverde.zip';
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (e) {
+    console.error(e);
+    alert('Hubo un error generando las imágenes. Intenta de nuevo.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = original;
+  }
 }
 
 function copiarTexto(btn, texto) {
