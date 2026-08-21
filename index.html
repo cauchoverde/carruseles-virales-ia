@@ -95,6 +95,15 @@
     width:100%; border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.5); display:block;
   }
   .modal-content .btn-zip, .modal-content .copy-btn { margin-top:10px; }
+  .modal-contador { color:white; font-size:.85rem; font-weight:700; margin-bottom:8px; }
+  .modal-img-wrap { position:relative; }
+  .modal-nav {
+    position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,.55);
+    color:white; border:none; width:42px; height:42px; border-radius:50%; font-size:1.6rem;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1;
+  }
+  .modal-nav-prev { left:8px; }
+  .modal-nav-next { right:8px; }
   .btn {
     background:#8B5CF6; color:white; border:none; padding:16px 30px;
     border-radius:12px; font-size:1.05rem; font-weight:700; cursor:pointer;
@@ -244,7 +253,12 @@
 
     <div class="modal-overlay" id="modalImagen" onclick="cerrarModal()">
       <div class="modal-content" onclick="event.stopPropagation()">
-        <img id="modalImg" src="" alt="Vista completa">
+        <div class="modal-contador" id="modalContador"></div>
+        <div class="modal-img-wrap" id="modalImgWrap">
+          <button class="modal-nav modal-nav-prev" onclick="modalAnterior()">‹</button>
+          <img id="modalImg" src="" alt="Vista completa">
+          <button class="modal-nav modal-nav-next" onclick="modalSiguiente()">›</button>
+        </div>
         <button class="btn-zip" onclick="descargarImagenGuardadaDesdeModal()">⬇️ Descargar esta imagen</button>
         <button class="copy-btn" style="width:100%;" onclick="cerrarModal()">Cerrar</button>
       </div>
@@ -655,11 +669,29 @@ function descargarImagenGuardada(index) {
 let modalIndiceActual = null;
 
 function abrirModal(index) {
-  const blob = imagenesGeneradas[index];
-  if (!blob) return;
+  if (!imagenesGeneradas[index]) return;
   modalIndiceActual = index;
-  document.getElementById('modalImg').src = URL.createObjectURL(blob);
+  mostrarImagenModal();
   document.getElementById('modalImagen').classList.add('show');
+}
+
+function mostrarImagenModal() {
+  const blob = imagenesGeneradas[modalIndiceActual];
+  if (!blob) return;
+  document.getElementById('modalImg').src = URL.createObjectURL(blob);
+  document.getElementById('modalContador').textContent = (modalIndiceActual + 1) + ' / ' + imagenesGeneradas.length;
+}
+
+function modalAnterior() {
+  if (modalIndiceActual === null) return;
+  modalIndiceActual = (modalIndiceActual - 1 + imagenesGeneradas.length) % imagenesGeneradas.length;
+  mostrarImagenModal();
+}
+
+function modalSiguiente() {
+  if (modalIndiceActual === null) return;
+  modalIndiceActual = (modalIndiceActual + 1) % imagenesGeneradas.length;
+  mostrarImagenModal();
 }
 
 function cerrarModal() {
@@ -671,6 +703,26 @@ function descargarImagenGuardadaDesdeModal() {
   if (modalIndiceActual === null) return;
   descargarImagenGuardada(modalIndiceActual);
 }
+
+// Deslizar con el dedo dentro del modal para pasar de imagen
+(function () {
+  const wrap = document.getElementById('modalImgWrap');
+  let touchStartX = 0;
+  wrap.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+  wrap.addEventListener('touchend', e => {
+    const diff = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(diff) > 40) {
+      if (diff < 0) modalSiguiente(); else modalAnterior();
+    }
+  }, { passive: true });
+})();
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('modalImagen').classList.contains('show')) return;
+  if (e.key === 'ArrowRight') modalSiguiente();
+  if (e.key === 'ArrowLeft') modalAnterior();
+  if (e.key === 'Escape') cerrarModal();
+});
 
 async function descargarTodasImagenes() {
   if (!ultimoResultado) return;
