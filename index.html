@@ -202,7 +202,7 @@
         <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Hago páginas web para restaurantes</button>
         <button type="button" class="chip" onclick="elegirEjemplo('nicho', this)">Enseño inglés a profesionales</button>
       </div>
-      <button class="btn" onclick="irPaso2()">Siguiente →</button>
+      <button class="btn" id="btnSiguiente" onclick="irPaso2()">Siguiente →</button>
     </div>
 
     <div class="paso" id="paso2" style="display:none;">
@@ -548,6 +548,13 @@ function elegirEjemplo(campo, btn) {
   const grupo = btn.parentElement;
   grupo.querySelectorAll('.chip').forEach(c => c.classList.remove('chip-selected'));
   btn.classList.add('chip-selected');
+  const idBoton = campo === 'nicho' ? 'btnSiguiente' : 'btnGenerar';
+  const boton = document.getElementById(idBoton);
+  if (boton) {
+    setTimeout(function () {
+      boton.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 80);
+  }
 }
 
 function irPaso2() {
