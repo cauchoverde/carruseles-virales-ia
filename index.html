@@ -216,6 +216,7 @@
     </div>
 
     <div class="resultado" id="resultado">
+      <button type="button" class="btn btn-outline" onclick="generarOtroCarrusel()" style="margin-bottom:14px;">↩️ Generar otro carrusel</button>
       <div class="titulo-carrusel" id="tituloCarrusel"></div>
       <p id="hintDeslizar" style="display:none; text-align:center; color:#8B5CF6; font-size:.82rem; font-weight:600; margin-bottom:2px;">👉 Desliza para ver todo el carrusel</p>
       <div class="galeria-grid" id="galeriaImagenes"></div>
@@ -523,9 +524,23 @@ function mostrarResultado(data) {
     cont.innerHTML = '<p style="color:#94A3B8; font-size:.85rem; text-align:center; padding:10px 0;">Tus imágenes están listas. (Falta activar los copys de redes sociales en el generador — pídele a soporte que actualice el prompt.)</p>';
   }
 
+  document.getElementById('paso1').style.display = 'none';
+  document.getElementById('paso2').style.display = 'none';
   document.getElementById('resultado').classList.add('show');
-  document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
-  generarGaleriaImagenes();
+  generarGaleriaImagenes().then(function () {
+    document.getElementById('resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
+function generarOtroCarrusel() {
+  document.getElementById('resultado').classList.remove('show');
+  document.getElementById('nicho').value = '';
+  document.getElementById('clienteIdeal').value = '';
+  ultimoResultado = null;
+  imagenesGeneradas = [];
+  document.getElementById('paso2').style.display = 'none';
+  document.getElementById('paso1').style.display = 'block';
+  document.getElementById('paso1').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function elegirEjemplo(campo, btn) {
