@@ -146,10 +146,11 @@
   }
   .limite-box h3 { margin-bottom:8px; }
   .pago-botones { display:flex; gap:12px; margin-top:16px; flex-wrap:wrap; }
-  .pago-botones a { flex:1; min-width:200px; }
+  .pago-botones a, .pago-botones button { flex:1; min-width:200px; }
   .pago-btn {
     display:block; text-align:center; padding:14px; border-radius:10px;
     font-weight:700; text-decoration:none; color:white; font-size:.95rem;
+    border:none; cursor:pointer; font-family:inherit;
   }
   .pago-btn.cop { background:#FDDA24; color:#1F2937; }
   .pago-btn.usd { background:#2c5cc5; }
@@ -251,8 +252,8 @@
         </span>
       </label>
       <div class="pago-botones" id="pagoBotones" style="opacity:.4; pointer-events:none;">
-        <a href="https://payco.link/23cb1388-2ec5-40ff-b5f1-569fa980fba3" target="_blank" class="pago-btn cop">Pagar en COP 🇨🇴</a>
-        <a href="https://payco.link/d1c21cef-28cd-400f-bb59-2d890c4ed44b" target="_blank" class="pago-btn usd">Pagar en USD 🌎</a>
+        <button type="button" onclick="pagarCOP()" class="pago-btn cop">Pagar en COP 🇨🇴</button>
+        <button type="button" onclick="pagarUSD()" class="pago-btn usd">Pagar en USD 🌎</button>
       </div>
     </div>
 
@@ -288,6 +289,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://checkout.epayco.co/checkout.js"></script>
 <script>
 // ===== CONFIGURACIÓN =====
 const WEBHOOK_GENERADOR = 'https://hook.us2.make.com/63x6utidymy4g0a0avp94ub2z3ekt17e';
@@ -333,6 +335,45 @@ const CLIENTE_GENERICO = [
   'Emprendedores que están empezando su marca',
   'Profesionales que quieren crecer en su carrera'
 ];
+
+const epaycoHandler = ePayco.checkout.configure({
+  key: '971a87af9c1d5b0e25cc608f538fd82a',
+  test: false
+});
+
+function pagarCOP() {
+  epaycoHandler.open({
+    name: 'Acceso completo Cauchoverde Digital',
+    description: 'Acceso ilimitado a Carruseles Virales IA + Calendario de Contenido IA + Generador de Prompts IA',
+    invoice: 'CVCOMBO-' + Date.now(),
+    currency: 'cop',
+    amount: '39000',
+    tax_base: '39000',
+    tax: '0',
+    country: 'co',
+    lang: 'es',
+    external: 'false',
+    confirmation: 'https://hook.us2.make.com/tj8iosdg332kbbjnnw3ijvsejst9j5l8',
+    response: 'https://cauchoverde-microactivos.vercel.app/'
+  });
+}
+
+function pagarUSD() {
+  epaycoHandler.open({
+    name: 'Acceso completo Cauchoverde Digital',
+    description: 'Full access to Carruseles Virales IA + Calendario de Contenido IA + Generador de Prompts IA',
+    invoice: 'CVCOMBO-' + Date.now(),
+    currency: 'usd',
+    amount: '15',
+    tax_base: '15',
+    tax: '0',
+    country: 'co',
+    lang: 'en',
+    external: 'false',
+    confirmation: 'https://hook.us2.make.com/tj8iosdg332kbbjnnw3ijvsejst9j5l8',
+    response: 'https://cauchoverde-microactivos.vercel.app/'
+  });
+}
 
 let planActual = 'GRATIS';
 let usos = 0;
