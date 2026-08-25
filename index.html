@@ -171,7 +171,6 @@
 </style>
 </head>
 <body>
-
 <header>
   <a href="https://cauchoverde-microactivos.vercel.app/" style="display:inline-block; font-size:.8rem; color:rgba(255,255,255,.85); text-decoration:none; margin-bottom:10px;">← Volver a Cauchoverde Digital</a>
   <img src="https://cauchoverde-microactivos.vercel.app/logo.png" alt="CauchoVerde" class="logo">
@@ -182,15 +181,12 @@
     <span class="badge">Estructura probada de 7 slides</span>
   </div>
 </header>
-
 <div class="wrap">
-
   <div class="card">
     <div class="plan-status">
       <span class="plan-pill" id="planBadge">GRATIS</span>
       <span class="usos-txt" id="usosTexto"></span>
     </div>
-
     <div class="paso" id="paso1">
       <label for="nicho">¿Qué vendes o haces?</label>
       <input type="text" id="nicho" placeholder="Escribe el tuyo o toca un ejemplo abajo...">
@@ -205,7 +201,6 @@
       </div>
       <button class="btn" id="btnSiguiente" onclick="irPaso2()">Siguiente →</button>
     </div>
-
     <div class="paso" id="paso2" style="display:none;">
       <div id="recapNicho" style="background:#211A38; color:#C4B5FD; border-radius:10px; padding:10px 14px; margin-bottom:16px; font-size:.85rem; font-weight:600;"></div>
       <label for="clienteIdeal">¿Quién es tu cliente ideal?</label>
@@ -215,7 +210,6 @@
       <button class="btn btn-outline" onclick="irPaso1()" style="margin-bottom:10px;">← Atrás</button>
       <button class="btn" id="btnGenerar" onclick="generarCarrusel()">Generar Carrusel Viral</button>
     </div>
-
     <div class="resultado" id="resultado">
       <button type="button" class="btn btn-outline" onclick="generarOtroCarrusel()" style="margin-bottom:14px;">↩️ Generar otro carrusel</button>
       <div class="titulo-carrusel" id="tituloCarrusel"></div>
@@ -226,14 +220,14 @@
       <div id="slidesContainer"></div>
       <button class="copy-btn" onclick="copiarTodo()" style="width:100%; margin-top:8px;">📋 Copiar todos los copys</button>
     </div>
-
     <div id="slideRender" style="position:absolute; left:-9999px; top:-9999px; width:1080px; height:1080px; overflow:hidden; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-      <div id="slideRenderInner" style="width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:100px; text-align:center; box-sizing:border-box; position:relative;">
-        <div id="slideRenderBadge" style="position:absolute; top:50px; right:60px; padding:10px 26px; border-radius:30px; font-weight:700; font-size:28px;"></div>
-        <div id="slideRenderTexto" style="font-weight:800; line-height:1.35; max-width:900px;"></div>
+      <div id="slideRenderInner" style="width:100%; height:100%; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; padding:100px; text-align:center; box-sizing:border-box; position:relative; overflow:hidden;">
+        <img id="slideRenderFoto" src="" alt="" crossorigin="anonymous" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; display:none;">
+        <div id="slideRenderOverlay" style="position:absolute; inset:0; z-index:1;"></div>
+        <div id="slideRenderBadge" style="position:absolute; top:50px; right:60px; padding:10px 26px; border-radius:30px; font-weight:700; font-size:28px; z-index:2;"></div>
+        <div id="slideRenderTexto" style="font-weight:800; line-height:1.35; max-width:900px; position:relative; z-index:2;"></div>
       </div>
     </div>
-
     <div class="limite-box" id="limiteBox" style="display:none;">
       <h3>⚠️ Llegaste al límite gratis de este mes</h3>
       <p>Desbloquea generación ilimitada, y de paso Calendario de Contenido IA y Generador de Prompts IA — sin costo extra.</p>
@@ -256,7 +250,6 @@
         <button type="button" onclick="pagarUSD()" class="pago-btn usd">Pagar en USD 🌎</button>
       </div>
     </div>
-
     <div class="modal-overlay" id="modalImagen" onclick="cerrarModal()">
       <div class="modal-content" onclick="event.stopPropagation()">
         <div class="modal-contador" id="modalContador"></div>
@@ -269,7 +262,6 @@
         <button class="copy-btn" style="width:100%;" onclick="cerrarModal()">Cerrar</button>
       </div>
     </div>
-
     <div class="activar-toggle" onclick="toggleActivar()">¿Ya tienes tu código PRO? Actívalo aquí</div>
     <div class="activar-panel" id="activarPanel">
       <label for="codigoInput">Código de acceso</label>
@@ -279,14 +271,11 @@
       <p class="msg-ok" id="okActivar">✅ ¡Acceso PRO activado!</p>
     </div>
   </div>
-
 </div>
-
 <footer>
   CauchoVerde Digital · Estratégico · Sostenible<br>
   ¿Dudas? Escríbenos a <a href="mailto:jhon@cauchoverde.com" style="color:inherit;">jhon@cauchoverde.com</a> o por <a href="https://wa.me/573138366266" target="_blank" style="color:inherit;">WhatsApp</a>
 </footer>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://checkout.epayco.co/checkout.js"></script>
@@ -295,7 +284,6 @@
 const WEBHOOK_GENERADOR = 'https://hook.us2.make.com/63x6utidymy4g0a0avp94ub2z3ekt17e';
 const WEBHOOK_VERIFICAR = 'https://hook.us2.make.com/tj8iosdg332kbbjnnw3ijvsejst9j5l8';
 const LIMITE_GRATIS = 3;
-
 // Opciones de "cliente ideal" filtradas según el nicho elegido en el paso 1
 const CLIENTE_POR_NICHO = {
   'Vendo ropa cómoda para emprendedoras': [
@@ -335,12 +323,10 @@ const CLIENTE_GENERICO = [
   'Emprendedores que están empezando su marca',
   'Profesionales que quieren crecer en su carrera'
 ];
-
 const epaycoHandler = ePayco.checkout.configure({
   key: '971a87af9c1d5b0e25cc608f538fd82a',
   test: false
 });
-
 function pagarCOP() {
   epaycoHandler.open({
     name: 'Acceso completo Cauchoverde Digital',
@@ -357,7 +343,6 @@ function pagarCOP() {
     response: 'https://cauchoverde-microactivos.vercel.app/'
   });
 }
-
 function pagarUSD() {
   epaycoHandler.open({
     name: 'Acceso completo Cauchoverde Digital',
@@ -374,11 +359,9 @@ function pagarUSD() {
     response: 'https://cauchoverde-microactivos.vercel.app/'
   });
 }
-
 let planActual = 'GRATIS';
 let usos = 0;
 let ultimoResultado = null;
-
 window.onload = function () {
   verificarAcceso();
   actualizarUI();
@@ -390,11 +373,9 @@ window.onload = function () {
     activarCodigo();
   }
 };
-
 function verificarAcceso() {
   const codigoPRO = localStorage.getItem('cauchoverde_codigo_pro');
   if (codigoPRO) planActual = 'PRO';
-
   const mesActual = new Date().toISOString().slice(0, 7);
   const usosGuardados = JSON.parse(localStorage.getItem('cauchoverde_usos') || '{}');
   if (usosGuardados.mes === mesActual) {
@@ -404,12 +385,10 @@ function verificarAcceso() {
     guardarUsos();
   }
 }
-
 function guardarUsos() {
   const mesActual = new Date().toISOString().slice(0, 7);
   localStorage.setItem('cauchoverde_usos', JSON.stringify({ mes: mesActual, usos: usos }));
 }
-
 function actualizarUI() {
   const badge = document.getElementById('planBadge');
   const usosTexto = document.getElementById('usosTexto');
@@ -423,7 +402,6 @@ function actualizarUI() {
     usosTexto.textContent = `${Math.max(0, LIMITE_GRATIS - usos)} generaciones gratis restantes este mes`;
   }
 }
-
 function toggleBotonesPago() {
   const check = document.getElementById('aceptoDatos');
   const botones = document.getElementById('pagoBotones');
@@ -435,20 +413,16 @@ function toggleBotonesPago() {
     botones.style.pointerEvents = 'none';
   }
 }
-
 function toggleActivar() {
   document.getElementById('activarPanel').classList.toggle('show');
 }
-
 async function activarCodigo() {
   const codigo = document.getElementById('codigoInput').value.trim();
   const errorEl = document.getElementById('errorActivar');
   const okEl = document.getElementById('okActivar');
   errorEl.style.display = 'none';
   okEl.style.display = 'none';
-
   if (!codigo) return;
-
   try {
     const resp = await fetch(WEBHOOK_VERIFICAR, {
       method: 'POST',
@@ -471,42 +445,33 @@ async function activarCodigo() {
     errorEl.style.display = 'block';
   }
 }
-
 async function generarCarrusel() {
   if (planActual === 'GRATIS' && usos >= LIMITE_GRATIS) {
     document.getElementById('limiteBox').style.display = 'block';
     document.getElementById('limiteBox').scrollIntoView({ behavior: 'smooth' });
     return;
   }
-
   const nicho = document.getElementById('nicho').value.trim();
   const clienteIdeal = document.getElementById('clienteIdeal').value.trim();
-
   if (!nicho || !clienteIdeal) {
     alert('Completa los dos campos antes de generar.');
     return;
   }
-
   const btn = document.getElementById('btnGenerar');
   const textoOriginal = btn.textContent;
   btn.disabled = true;
   btn.innerHTML = '<span class="loading-dots">Generando con IA</span>';
-
   try {
     const resp = await fetch(WEBHOOK_GENERADOR, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nicho: nicho, cliente_ideal: clienteIdeal })
     });
-
     if (!resp.ok) throw new Error('Respuesta no válida del servidor');
-
     let texto = await resp.text();
     texto = texto.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-
     const data = JSON.parse(texto);
     mostrarResultado(data);
-
     if (planActual === 'GRATIS') {
       usos++;
       guardarUsos();
@@ -520,51 +485,41 @@ async function generarCarrusel() {
     btn.textContent = textoOriginal;
   }
 }
-
 function mostrarResultado(data) {
   ultimoResultado = data;
   document.getElementById('tituloCarrusel').textContent = '✅ ' + (data.titulo_carrusel || 'Tu carrusel');
   const cont = document.getElementById('slidesContainer');
   cont.innerHTML = '';
-
   const copys = data.copys || {};
   const redes = [
     { key: 'instagram', nombre: '📸 Copy para Instagram' },
     { key: 'tiktok', nombre: '🎵 Copy para TikTok' },
     { key: 'facebook', nombre: '👍 Copy para Facebook' }
   ];
-
   let algunCopy = false;
   redes.forEach(red => {
     const texto = copys[red.key];
     if (!texto) return;
     algunCopy = true;
-
     const div = document.createElement('div');
     div.className = 'slide';
-
     const h4 = document.createElement('h4');
     h4.textContent = red.nombre;
-
     const p = document.createElement('p');
     p.style.whiteSpace = 'pre-wrap';
     p.textContent = texto;
-
     const btn = document.createElement('button');
     btn.className = 'copy-btn';
     btn.textContent = '📋 Copiar';
     btn.addEventListener('click', () => copiarTexto(btn, texto));
-
     div.appendChild(h4);
     div.appendChild(p);
     div.appendChild(btn);
     cont.appendChild(div);
   });
-
   if (!algunCopy) {
     cont.innerHTML = '<p style="color:#94A3B8; font-size:.85rem; text-align:center; padding:10px 0;">Tus imágenes están listas. (Falta activar los copys de redes sociales en el generador — pídele a soporte que actualice el prompt.)</p>';
   }
-
   document.getElementById('paso1').style.display = 'none';
   document.getElementById('paso2').style.display = 'none';
   document.getElementById('resultado').classList.add('show');
@@ -572,7 +527,6 @@ function mostrarResultado(data) {
     document.getElementById('resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 }
-
 function generarOtroCarrusel() {
   document.getElementById('resultado').classList.remove('show');
   document.getElementById('nicho').value = '';
@@ -583,7 +537,6 @@ function generarOtroCarrusel() {
   document.getElementById('paso1').style.display = 'block';
   document.getElementById('paso1').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
-
 function elegirEjemplo(campo, btn) {
   document.getElementById(campo).value = btn.textContent;
   const grupo = btn.parentElement;
@@ -597,7 +550,6 @@ function elegirEjemplo(campo, btn) {
     }, 80);
   }
 }
-
 function irPaso2() {
   const nicho = document.getElementById('nicho').value.trim();
   if (!nicho) {
@@ -610,7 +562,6 @@ function irPaso2() {
   document.getElementById('paso2').style.display = 'block';
   document.getElementById('paso2').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
-
 function actualizarChipsCliente(nicho) {
   const opciones = CLIENTE_POR_NICHO[nicho] || CLIENTE_GENERICO;
   const cont = document.getElementById('chipsCliente');
@@ -626,13 +577,11 @@ function actualizarChipsCliente(nicho) {
     cont.appendChild(btn);
   });
 }
-
 function irPaso1() {
   document.getElementById('paso2').style.display = 'none';
   document.getElementById('paso1').style.display = 'block';
   document.getElementById('paso1').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
-
 // ===== GENERACIÓN DE IMÁGENES DEL CARRUSEL =====
 function tamanoFuente(texto) {
   const len = (texto || '').length;
@@ -641,39 +590,67 @@ function tamanoFuente(texto) {
   if (len > 90) return '42px';
   return '52px';
 }
-
 function prepararSlideRender(slide, index, total) {
   const inner = document.getElementById('slideRenderInner');
+  const foto = document.getElementById('slideRenderFoto');
+  const overlay = document.getElementById('slideRenderOverlay');
   const badge = document.getElementById('slideRenderBadge');
   const texto = document.getElementById('slideRenderTexto');
   const esExtremo = (index === 0 || index === total - 1);
 
-  if (esExtremo) {
-    inner.style.background = 'linear-gradient(135deg,#10B981 0%,#059669 50%,#8B5CF6 100%)';
+  if (slide.foto_url) {
+    // Foto real de Pexels de fondo + degradado oscuro para que el texto se lea bien
+    foto.style.display = 'block';
+    foto.src = slide.foto_url;
+    inner.style.background = '#0B1220';
+    overlay.style.background = 'linear-gradient(to bottom, rgba(0,0,0,.10) 0%, rgba(0,0,0,.35) 55%, rgba(0,0,0,.80) 100%)';
     texto.style.color = 'white';
-    badge.style.background = 'rgba(255,255,255,.25)';
+    badge.style.background = 'rgba(0,0,0,.45)';
     badge.style.color = 'white';
   } else {
-    inner.style.background = '#F9FAFB';
-    texto.style.color = '#1F2937';
-    badge.style.background = '#10B981';
-    badge.style.color = 'white';
+    // Respaldo por si no llegó foto (ej. Pexels no respondió): diseño clásico de siempre
+    foto.style.display = 'none';
+    foto.removeAttribute('src');
+    overlay.style.background = 'transparent';
+    if (esExtremo) {
+      inner.style.background = 'linear-gradient(135deg,#10B981 0%,#059669 50%,#8B5CF6 100%)';
+      texto.style.color = 'white';
+      badge.style.background = 'rgba(255,255,255,.25)';
+      badge.style.color = 'white';
+    } else {
+      inner.style.background = '#F9FAFB';
+      texto.style.color = '#1F2937';
+      badge.style.background = '#10B981';
+      badge.style.color = 'white';
+    }
   }
 
   badge.textContent = (index + 1) + '/' + total;
   texto.style.fontSize = tamanoFuente(slide.texto);
   texto.textContent = slide.texto || '';
 }
-
+function esperarFoto(foto) {
+  // Espera a que la foto real termine de cargar antes de tomar la captura.
+  // Si tarda demasiado o falla, sigue de todas formas (no bloquea el carrusel).
+  return new Promise(function (resolve) {
+    if (foto.style.display === 'none' || !foto.src) { resolve(); return; }
+    if (foto.complete && foto.naturalWidth > 0) { resolve(); return; }
+    let listo = false;
+    const terminar = function () { if (!listo) { listo = true; resolve(); } };
+    foto.onload = terminar;
+    foto.onerror = terminar;
+    setTimeout(terminar, 4000);
+  });
+}
 async function generarImagenSlide(slide, index, total) {
   prepararSlideRender(slide, index, total);
+  const foto = document.getElementById('slideRenderFoto');
+  await esperarFoto(foto);
   await new Promise(r => setTimeout(r, 60));
   const el = document.getElementById('slideRender');
-  return await html2canvas(el, { width: 1080, height: 1080, scale: 1, backgroundColor: null });
+  return await html2canvas(el, { width: 1080, height: 1080, scale: 1, backgroundColor: null, useCORS: true });
 }
-
 let imagenesGeneradas = [];
-
 async function generarGaleriaImagenes() {
   if (!ultimoResultado) return;
   const slides = ultimoResultado.slides || [];
@@ -684,7 +661,6 @@ async function generarGaleriaImagenes() {
   hint.style.display = 'none';
   document.getElementById('galeriaDots').innerHTML = '';
   imagenesGeneradas = [];
-
   try {
     for (let i = 0; i < total; i++) {
       const canvas = await generarImagenSlide(slides[i], i, total);
@@ -710,7 +686,6 @@ async function generarGaleriaImagenes() {
     galeria.innerHTML = '<p class="cargando-imgs" style="color:#f87171;">No se pudo generar la vista previa. El botón de ZIP igual intentará generarlas.</p>';
   }
 }
-
 function construirDots(n) {
   const cont = document.getElementById('galeriaDots');
   cont.innerHTML = '';
@@ -720,7 +695,6 @@ function construirDots(n) {
     cont.appendChild(d);
   }
 }
-
 function configurarScrollGaleria() {
   const galeria = document.getElementById('galeriaImagenes');
   galeria.onscroll = () => {
@@ -731,7 +705,6 @@ function configurarScrollGaleria() {
     document.querySelectorAll('#galeriaDots .dot').forEach((d, i) => d.classList.toggle('active', i === idx));
   };
 }
-
 function descargarImagenGuardada(index) {
   const blob = imagenesGeneradas[index];
   if (!blob) return;
@@ -742,45 +715,37 @@ function descargarImagenGuardada(index) {
   a.click();
   URL.revokeObjectURL(url);
 }
-
 let modalIndiceActual = null;
-
 function abrirModal(index) {
   if (!imagenesGeneradas[index]) return;
   modalIndiceActual = index;
   mostrarImagenModal();
   document.getElementById('modalImagen').classList.add('show');
 }
-
 function mostrarImagenModal() {
   const blob = imagenesGeneradas[modalIndiceActual];
   if (!blob) return;
   document.getElementById('modalImg').src = URL.createObjectURL(blob);
   document.getElementById('modalContador').textContent = (modalIndiceActual + 1) + ' / ' + imagenesGeneradas.length;
 }
-
 function modalAnterior() {
   if (modalIndiceActual === null) return;
   modalIndiceActual = (modalIndiceActual - 1 + imagenesGeneradas.length) % imagenesGeneradas.length;
   mostrarImagenModal();
 }
-
 function modalSiguiente() {
   if (modalIndiceActual === null) return;
   modalIndiceActual = (modalIndiceActual + 1) % imagenesGeneradas.length;
   mostrarImagenModal();
 }
-
 function cerrarModal() {
   document.getElementById('modalImagen').classList.remove('show');
   modalIndiceActual = null;
 }
-
 function descargarImagenGuardadaDesdeModal() {
   if (modalIndiceActual === null) return;
   descargarImagenGuardada(modalIndiceActual);
 }
-
 // Deslizar con el dedo dentro del modal para pasar de imagen
 (function () {
   const wrap = document.getElementById('modalImgWrap');
@@ -793,14 +758,12 @@ function descargarImagenGuardadaDesdeModal() {
     }
   }, { passive: true });
 })();
-
 document.addEventListener('keydown', e => {
   if (!document.getElementById('modalImagen').classList.contains('show')) return;
   if (e.key === 'ArrowRight') modalSiguiente();
   if (e.key === 'ArrowLeft') modalAnterior();
   if (e.key === 'Escape') cerrarModal();
 });
-
 async function descargarTodasImagenes() {
   if (!ultimoResultado) return;
   const slides = ultimoResultado.slides || [];
@@ -808,7 +771,6 @@ async function descargarTodasImagenes() {
   const btn = document.getElementById('btnDescargarZip');
   const original = btn.textContent;
   btn.disabled = true;
-
   try {
     if (imagenesGeneradas.length !== total) {
       btn.textContent = 'Generando imágenes...';
@@ -832,7 +794,6 @@ async function descargarTodasImagenes() {
     btn.textContent = original;
   }
 }
-
 function copiarTexto(btn, texto) {
   navigator.clipboard.writeText(texto).then(() => {
     const original = btn.textContent;
@@ -840,7 +801,6 @@ function copiarTexto(btn, texto) {
     setTimeout(() => btn.textContent = original, 1500);
   });
 }
-
 function copiarTodo() {
   if (!ultimoResultado || !ultimoResultado.copys) {
     alert('Todavía no hay copys generados.');
