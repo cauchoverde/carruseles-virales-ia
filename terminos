@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Términos y Condiciones - CauchoVerde Digital</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background:#0B1220;
+    color:#E7ECF3;
+    line-height:1.6;
+  }
+  header {
+    background:linear-gradient(135deg,#10B981 0%,#0d9467 100%);
+    color:white;
+    padding:32px 20px;
+    text-align:center;
+  }
+  header h1 { font-size:1.5rem; }
+  .wrap { max-width:720px; margin:0 auto; padding:32px 20px 60px; }
+  h2 { color:#10B981; font-size:1.1rem; margin:28px 0 10px; }
+  p, li { color:#C7D0DE; font-size:.98rem; margin-bottom:10px; }
+  ul { padding-left:20px; margin-bottom:10px; }
+  a { color:#8B5CF6; }
+  .fecha { color:#7A879C; font-size:.85rem; margin-bottom:20px; }
+  footer { text-align:center; padding:30px 20px; color:#7A879C; font-size:.85rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>📄 Términos y Condiciones</h1>
+  <p style="opacity:.9; margin-top:6px;">CauchoVerde Digital</p>
+</header>
+<div class="wrap">
+  <p class="fecha">Última actualización: agosto de 2026</p>
+
+  <p>Al usar los sitios y herramientas de CauchoVerde Digital (Carruseles Virales IA, Calendario de Contenido IA y Generador de Prompts IA), aceptas los siguientes términos.</p>
+
+  <h2>1. Qué ofrecemos</h2>
+  <p>CauchoVerde Digital ofrece un paquete de 3 microherramientas basadas en inteligencia artificial para ayudarte a crear contenido para redes sociales: carruseles con fotos e imágenes, calendarios de contenido semanales, y prompts listos para usar en ChatGPT o Gemini.</p>
+
+  <h2>2. Plan gratuito y acceso completo</h2>
+  <p>Puedes probar nuestras herramientas gratis, con un límite de usos mensuales, sin necesidad de tarjeta ni registro. El acceso completo e ilimitado a las 3 herramientas tiene un costo único de <strong>$39.000 COP (aprox. $15 USD)</strong>, mediante un solo pago — no es una suscripción recurrente. Al pagar, recibirás un código de acceso por correo electrónico para activar tu plan PRO.</p>
+
+  <h2>3. Uso permitido</h2>
+  <p>El contenido que generas con nuestras herramientas (imágenes, textos, prompts) es tuyo para usar libremente en tus propias redes sociales y negocio. No está permitido revender el acceso a las herramientas ni compartir tu código de acceso PRO con terceros.</p>
+
+  <h2>4. Contenido generado por IA</h2>
+  <p>El contenido (textos, imágenes de stock, sugerencias) se genera automáticamente mediante inteligencia artificial y proveedores externos de fotografía de stock. Aunque buscamos que el resultado sea relevante y de calidad, no garantizamos resultados específicos de ventas, alcance o engagement en tus redes sociales — el contenido es una herramienta de apoyo, y su efectividad depende de cómo lo uses.</p>
+
+  <h2>5. Pagos y reembolsos</h2>
+  <p>Los pagos se procesan a través de ePayco, una pasarela de pagos certificada. Si tienes un problema con tu pago o no recibiste tu código de acceso, contáctanos y lo resolveremos.</p>
+
+  <h2>6. Propiedad intelectual</h2>
+  <p>Las herramientas, el diseño y el software de CauchoVerde Digital son propiedad de CauchoVerde Digital. El contenido que tú generas con ellas es tuyo.</p>
+
+  <h2>7. Cambios en el servicio</h2>
+  <p>Podemos actualizar, mejorar o modificar las herramientas en cualquier momento para ofrecer un mejor servicio.</p>
+
+  <h2>8. Contacto</h2>
+  <ul>
+    <li>Correo: <a href="mailto:jhon@cauchoverde.com">jhon@cauchoverde.com</a></li>
+    <li>WhatsApp: <a href="https://wa.me/573138366266" target="_blank">+57 313 836 6266</a></li>
+  </ul>
+</div>
+<footer>CauchoVerde Digital · Colombia</footer>
+</body>
+</html>
