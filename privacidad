@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de Privacidad - CauchoVerde Digital</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background:#0B1220;
+    color:#E7ECF3;
+    line-height:1.6;
+  }
+  header {
+    background:linear-gradient(135deg,#10B981 0%,#0d9467 100%);
+    color:white;
+    padding:32px 20px;
+    text-align:center;
+  }
+  header h1 { font-size:1.5rem; }
+  .wrap { max-width:720px; margin:0 auto; padding:32px 20px 60px; }
+  h2 { color:#10B981; font-size:1.1rem; margin:28px 0 10px; }
+  p, li { color:#C7D0DE; font-size:.98rem; margin-bottom:10px; }
+  ul { padding-left:20px; margin-bottom:10px; }
+  a { color:#8B5CF6; }
+  .fecha { color:#7A879C; font-size:.85rem; margin-bottom:20px; }
+  footer { text-align:center; padding:30px 20px; color:#7A879C; font-size:.85rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🔒 Política de Privacidad</h1>
+  <p style="opacity:.9; margin-top:6px;">CauchoVerde Digital</p>
+</header>
+<div class="wrap">
+  <p class="fecha">Última actualización: agosto de 2026</p>
+
+  <p>CauchoVerde Digital ("nosotros") ofrece un conjunto de microherramientas con inteligencia artificial (Carruseles Virales IA, Calendario de Contenido IA y Generador de Prompts IA) a través de sus sitios web. Esta política explica qué datos personales recopilamos, para qué los usamos y cómo puedes ejercer tus derechos sobre ellos, conforme a la Ley 1581 de 2012 de Colombia (Ley de Protección de Datos Personales).</p>
+
+  <h2>1. Qué datos recopilamos</h2>
+  <p>Recopilamos únicamente lo necesario para operar el servicio:</p>
+  <ul>
+    <li><strong>Correo electrónico:</strong> cuando compras acceso completo a nuestras herramientas, para procesar tu pago y enviarte tu código de acceso.</li>
+    <li><strong>Datos de uso básico:</strong> como cuántas veces has generado contenido con las herramientas gratuitas (guardado localmente en tu navegador, no en nuestros servidores).</li>
+    <li><strong>Datos que tú escribes en los formularios</strong> (por ejemplo, la descripción de tu negocio o tu cliente ideal), que se usan únicamente para generar el contenido que solicitas en el momento, y no se almacenan de forma permanente ligados a tu identidad.</li>
+  </ul>
+
+  <h2>2. Para qué usamos tus datos</h2>
+  <ul>
+    <li>Procesar tu pago a través de nuestra pasarela de pagos (ePayco).</li>
+    <li>Enviarte tu código de acceso y responder tus dudas sobre la compra.</li>
+    <li>Generar el contenido (carruseles, calendarios, prompts) que solicitas usando nuestras herramientas.</li>
+  </ul>
+  <p>No usamos tu correo para enviarte publicidad no solicitada, ni lo vendemos ni lo compartimos con terceros para fines distintos a los aquí descritos.</p>
+
+  <h2>3. Con quién compartimos datos</h2>
+  <p>Solo compartimos datos con los proveedores estrictamente necesarios para operar el servicio: nuestra pasarela de pagos (ePayco), y los proveedores de infraestructura que usamos para generar contenido con inteligencia artificial. Estos proveedores procesan los datos únicamente para prestarnos el servicio contratado.</p>
+
+  <h2>4. Tus derechos</h2>
+  <p>Como titular de tus datos, tienes derecho a conocer, actualizar, rectificar y solicitar la eliminación de tus datos personales en cualquier momento. Para ejercer cualquiera de estos derechos, escríbenos a <a href="mailto:jhon@cauchoverde.com">jhon@cauchoverde.com</a> y atenderemos tu solicitud a la mayor brevedad.</p>
+
+  <h2>5. Seguridad</h2>
+  <p>Tomamos medidas razonables para proteger tu información, incluyendo el uso de conexiones cifradas (HTTPS) en todos nuestros sitios.</p>
+
+  <h2>6. Cambios a esta política</h2>
+  <p>Podemos actualizar esta política ocasionalmente. Cualquier cambio importante será reflejado en esta misma página con su fecha de actualización.</p>
+
+  <h2>7. Contacto</h2>
+  <p>Si tienes preguntas sobre esta política de privacidad, contáctanos:</p>
+  <ul>
+    <li>Correo: <a href="mailto:jhon@cauchoverde.com">jhon@cauchoverde.com</a></li>
+    <li>WhatsApp: <a href="https://wa.me/573138366266" target="_blank">+57 313 836 6266</a></li>
+  </ul>
+</div>
+<footer>CauchoVerde Digital · Colombia</footer>
+</body>
+</html>
