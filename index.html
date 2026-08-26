@@ -262,6 +262,12 @@
         <button class="copy-btn" style="width:100%;" onclick="cerrarModal()">Cerrar</button>
       </div>
     </div>
+    <div class="modal-overlay" id="modalLegal" onclick="cerrarLegal()">
+      <div class="modal-content" style="max-width:600px; text-align:left; max-height:80vh; overflow-y:auto; background:#131C2E; border-radius:14px; padding:26px;" onclick="event.stopPropagation()">
+        <div id="legalContenido" style="color:#C7D0DE; font-size:.92rem; line-height:1.6;"></div>
+        <button class="copy-btn" style="width:100%; margin-top:18px;" onclick="cerrarLegal()">Cerrar</button>
+      </div>
+    </div>
     <div class="activar-toggle" onclick="toggleActivar()">¿Ya tienes tu código PRO? Actívalo aquí</div>
     <div class="activar-panel" id="activarPanel">
       <label for="codigoInput">Código de acceso</label>
@@ -274,12 +280,52 @@
 </div>
 <footer>
   CauchoVerde Digital · Estratégico · Sostenible<br>
-  ¿Dudas? Escríbenos a <a href="mailto:jhon@cauchoverde.com" style="color:inherit;">jhon@cauchoverde.com</a> o por <a href="https://wa.me/573138366266" target="_blank" style="color:inherit;">WhatsApp</a>
+  ¿Dudas? Escríbenos a <a href="mailto:jhon@cauchoverde.com" style="color:inherit;">jhon@cauchoverde.com</a> o por <a href="https://wa.me/573138366266" target="_blank" style="color:inherit;">WhatsApp</a><br>
+  <a href="#privacidad" onclick="abrirLegal('privacidad'); return false;" style="color:#8B5CF6;">Política de Privacidad</a> · <a href="#terminos" onclick="abrirLegal('terminos'); return false;" style="color:#8B5CF6;">Términos y Condiciones</a>
 </footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://checkout.epayco.co/checkout.js"></script>
 <script>
+// ===== LEGAL (Política de Privacidad y Términos) =====
+const TEXTO_PRIVACIDAD = `
+  <h2 style="color:#10B981; font-size:1.15rem; margin-bottom:6px;">🔒 Política de Privacidad</h2>
+  <p style="color:#7A879C; font-size:.8rem; margin-bottom:14px;">Última actualización: agosto de 2026</p>
+  <p style="margin-bottom:10px;">CauchoVerde Digital ("nosotros") ofrece un conjunto de microherramientas con inteligencia artificial (Carruseles Virales IA, Calendario de Contenido IA y Generador de Prompts IA). Esta política explica qué datos personales recopilamos, para qué los usamos y cómo puedes ejercer tus derechos sobre ellos, conforme a la Ley 1581 de 2012 de Colombia.</p>
+  <h3 style="color:#E7ECF3; font-size:1rem; margin:14px 0 6px;">1. Qué datos recopilamos</h3>
+  <p style="margin-bottom:10px;">Correo electrónico (cuando compras acceso, para procesar tu pago y enviarte tu código de acceso), datos básicos de uso guardados en tu propio navegador, y lo que escribes en los formularios (usado solo para generar el contenido que pides en el momento).</p>
+  <h3 style="color:#E7ECF3; font-size:1rem; margin:14px 0 6px;">2. Para qué los usamos</h3>
+  <p style="margin-bottom:10px;">Procesar tu pago (vía ePayco), enviarte tu código de acceso, responder tus dudas, y generar el contenido que solicitas. No vendemos tu correo ni lo usamos para publicidad no solicitada.</p>
+  <h3 style="color:#E7ECF3; font-size:1rem; margin:14px 0 6px;">3. Tus derechos</h3>
+  <p style="margin-bottom:10px;">Puedes conocer, actualizar, rectificar o pedir la eliminación de tus datos personales cuando quieras, escribiendo a <a href="mailto:jhon@cauchoverde.com" style="color:#8B5CF6;">jhon@cauchoverde.com</a>.</p>
+  <h3 style="color:#E7ECF3; font-size:1rem; margin:14px 0 6px;">4. Contacto</h3>
+  <p>Correo: <a href="mailto:jhon@cauchoverde.com" style="color:#8B5CF6;">jhon@cauchoverde.com</a> · WhatsApp: <a href="https://wa.me/573138366266" style="color:#8B5CF6;" target="_blank">+57 313 836 6266</a></p>
+`;
+const TEXTO_TERMINOS = `
+  <h2 style="color:#10B981; font-size:1.15rem; margin-bottom:6px;">📄 Términos y Condiciones</h2>
+  <p style="color:#7A879C; font-size:.8rem; margin-bottom:14px;">Última actualización: agosto de 2026</p>
+  <p style="margin-bottom:10px;">Al usar los sitios y herramientas de CauchoVerde Digital aceptas los siguientes términos.</p>
+  <h3 style="color:#E7ECF3; font-size:1rem; margin:14px 0 6px;">1. Qué ofrecemos</h3>
+  <p style="margin-bottom:10px;">Un paquete de 3 microherramientas con IA: carruseles con fotos e imágenes, calendarios de contenido semanales, y prompts listos para ChatGPT o Gemini.</p>
+  <h3 style="color:#E7ECF3; font-size:1rem; margin:14px 0 6px;">2. Plan gratuito y acceso completo</h3>
+  <p style="margin-bottom:10px;">Puedes probar gratis, con límite de usos mensuales, sin tarjeta ni registro. El acceso completo a las 3 herramientas cuesta un pago único de <strong>$39.000 COP (≈$15 USD)</strong> — no es una suscripción.</p>
+  <h3 style="color:#E7ECF3; font-size:1rem; margin:14px 0 6px;">3. Contenido generado por IA</h3>
+  <p style="margin-bottom:10px;">El contenido se genera automáticamente con IA y proveedores externos de fotografía de stock. No garantizamos resultados específicos de ventas o alcance en redes sociales.</p>
+  <h3 style="color:#E7ECF3; font-size:1rem; margin:14px 0 6px;">4. Pagos</h3>
+  <p style="margin-bottom:10px;">Los pagos se procesan por ePayco. Si tienes un problema con tu pago o tu código de acceso, contáctanos y lo resolvemos.</p>
+  <h3 style="color:#E7ECF3; font-size:1rem; margin:14px 0 6px;">5. Contacto</h3>
+  <p>Correo: <a href="mailto:jhon@cauchoverde.com" style="color:#8B5CF6;">jhon@cauchoverde.com</a> · WhatsApp: <a href="https://wa.me/573138366266" style="color:#8B5CF6;" target="_blank">+57 313 836 6266</a></p>
+`;
+function abrirLegal(tipo) {
+  const cont = document.getElementById('legalContenido');
+  cont.innerHTML = tipo === 'terminos' ? TEXTO_TERMINOS : TEXTO_PRIVACIDAD;
+  document.getElementById('modalLegal').classList.add('show');
+  history.replaceState(null, '', '#' + tipo);
+}
+function cerrarLegal() {
+  document.getElementById('modalLegal').classList.remove('show');
+  history.replaceState(null, '', window.location.pathname + window.location.search);
+}
 // ===== CONFIGURACIÓN =====
 const WEBHOOK_GENERADOR = 'https://hook.us2.make.com/63x6utidymy4g0a0avp94ub2z3ekt17e';
 const WEBHOOK_VERIFICAR = 'https://hook.us2.make.com/tj8iosdg332kbbjnnw3ijvsejst9j5l8';
@@ -371,6 +417,11 @@ window.onload = function () {
     document.getElementById('codigoInput').value = params.get('code');
     toggleActivar();
     activarCodigo();
+  }
+  // Si entran directo con #privacidad o #terminos (ej. desde un link externo), abre esa sección
+  const hash = window.location.hash.replace('#', '');
+  if (hash === 'privacidad' || hash === 'terminos') {
+    abrirLegal(hash);
   }
 };
 function verificarAcceso() {
