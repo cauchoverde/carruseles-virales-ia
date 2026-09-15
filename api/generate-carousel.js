@@ -28,27 +28,51 @@ export default async function handler(req, res) {
 Responde ÚNICAMENTE con un JSON válido, sin explicaciones, sin texto antes ni después, exactamente con esta estructura:
 {"titulo_carrusel": "string", "slides": [{"numero": 1, "tipo": "Gancho", "texto": "string", "busqueda_imagen": "string"}, {"numero": 2, "tipo": "Dato", "texto": "string", "busqueda_imagen": "string"}, {"numero": 3, "tipo": "Error", "texto": "string", "busqueda_imagen": "string"}, {"numero": 4, "tipo": "Reencuadre", "texto": "string", "busqueda_imagen": "string"}, {"numero": 5, "tipo": "Solución", "texto": "string", "busqueda_imagen": "string"}, {"numero": 6, "tipo": "Prueba social", "texto": "string", "busqueda_imagen": "string"}, {"numero": 7, "tipo": "CTA", "texto": "string", "busqueda_imagen": "string"}], "copys": {"instagram": "string", "tiktok": "string", "facebook": "string"}}`;
 
+  // Gemini a veces responde 503 "modelo con mucha demanda" o 429 "rate limit" —
+  // son errores pasajeros del lado de Google, no de nuestra configuración.
+  // Reintentamos un par de veces con una pequeña espera antes de rendirnos.
+  async function llamarGemini(intentos = 3) {
+    for (let intento = 1; intento <= intentos; intento++) {
+      const resp = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-goog-api-key': geminiKey
+          },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { responseMimeType: 'application/json' }
+          })
+        }
+      );
+
+      if (resp.ok) return resp;
+
+      const esReintentable = resp.status === 503 || resp.status === 429;
+      if (!esReintentable || intento === intentos) return resp;
+
+      const espera = 1200 * intento; // 1.2s, luego 2.4s
+      console.error(`Gemini respondió ${resp.status}, reintentando en ${espera}ms (intento ${intento}/${intentos})`);
+      await new Promise((r) => setTimeout(r, espera));
+    }
+  }
+
   let parsed;
   try {
-    const geminiResp = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-goog-api-key': geminiKey
-        },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { responseMimeType: 'application/json' }
-        })
-      }
-    );
+    const geminiResp = await llamarGemini();
 
     if (!geminiResp.ok) {
       const errText = await geminiResp.text();
       console.error('Error de Gemini:', errText);
-      return res.status(502).json({ error: 'Error al generar el carrusel con la IA', detalle: errText });
+      const esSobrecarga = geminiResp.status === 503 || geminiResp.status === 429;
+      return res.status(502).json({
+        error: esSobrecarga
+          ? 'La IA está saturada en este momento, intenta de nuevo en unos segundos'
+          : 'Error al generar el carrusel con la IA',
+        detalle: errText
+      });
     }
 
     const geminiData = await geminiResp.json();
