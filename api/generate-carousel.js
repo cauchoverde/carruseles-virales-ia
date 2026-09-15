@@ -43,7 +43,7 @@ Responde ÚNICAMENTE con un JSON válido, sin explicaciones, sin texto antes ni 
           },
           body: JSON.stringify({
             contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { responseMimeType: 'application/json' }
+            generationConfig: { responseMimeType: 'application/json', maxOutputTokens: 8192 }
           })
         }
       );
@@ -76,6 +76,7 @@ Responde ÚNICAMENTE con un JSON válido, sin explicaciones, sin texto antes ni 
     }
 
     const geminiData = await geminiResp.json();
+    const finishReason = geminiData?.candidates?.[0]?.finishReason;
     const rawText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!rawText) {
       return res.status(502).json({ error: 'La IA no devolvió contenido', detalle: JSON.stringify(geminiData) });
@@ -85,10 +86,21 @@ Responde ÚNICAMENTE con un JSON válido, sin explicaciones, sin texto antes ni 
       parsed = JSON.parse(rawText);
     } catch (e) {
       const match = rawText.match(/\{[\s\S]*\}/);
+      let parseoDeRespaldoFalló = false;
       if (match) {
-        parsed = JSON.parse(match[0]);
-      } else {
-        throw e;
+        try {
+          parsed = JSON.parse(match[0]);
+        } catch (e2) {
+          parseoDeRespaldoFalló = true;
+        }
+      }
+      if (!match || parseoDeRespaldoFalló) {
+        // Si la IA se quedó sin espacio para terminar el JSON, este es el aviso
+        // claro; si no, es un problema real de formato que hay que revisar.
+        const motivo = finishReason === 'MAX_TOKENS'
+          ? 'La respuesta de la IA se cortó por quedarse sin espacio (MAX_TOKENS) — si esto se repite seguido, hay que subir aún más el límite de tokens.'
+          : 'La IA no devolvió un JSON válido.';
+        return res.status(502).json({ error: motivo, detalle: rawText.slice(0, 500) });
       }
     }
   } catch (err) {
